@@ -1,0 +1,678 @@
+{% extends "base.html" %}
+
+{% block title %}Practicar - Escritor de Frases Claras{% endblock %}
+
+{% block content %}
+<!-- Encabezado -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card bg-gradient-primary text-white border-0 shadow">
+            <div class="card-body p-4">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h2 class="display-5 fw-bold mb-3">
+                            <i class="fas fa-pencil-alt me-2"></i> 
+                            Práctica de Frases
+                        </h2>
+                        <p class="lead mb-0 opacity-90">
+                            <i class="fas fa-rule me-2"></i>
+                            Ordena correctamente: QUIÉN + VERBO + A QUIÉN (corto) + QUÉ (largo)
+                        </p>
+                    </div>
+                    <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                        <div class="d-inline-block bg-white bg-opacity-25 rounded-3 p-3">
+                            <i class="fas fa-star fa-2x mb-2"></i>
+                            <h3 class="mb-0" id="scoreDisplay">0</h3>
+                            <small>Puntos</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Selector de modo de práctica -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card shadow">
+            <div class="card-body">
+                <div class="row g-2">
+                    <div class="col-md-4">
+                        <button class="btn btn-mode w-100 py-3 active" id="modeOrder" onclick="setMode('order')">
+                            <i class="fas fa-sort-amount-down fa-2x mb-2"></i>
+                            <br>
+                            Ordenar Componentes
+                        </button>
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-mode w-100 py-3" id="modeTranslation" onclick="setMode('translation')">
+                            <i class="fas fa-language fa-2x mb-2"></i>
+                            <br>
+                            Traducción
+                        </button>
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-mode w-100 py-3" id="modeRewrite" onclick="setMode('rewrite')">
+                            <i class="fas fa-edit fa-2x mb-2"></i>
+                            <br>
+                            Reescribir
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Área de práctica principal -->
+<div class="row mb-4">
+    <div class="col-lg-8 mx-auto">
+        <div class="card shadow-lg border-0" id="practiceContainer">
+            <div class="card-header bg-white border-0 pt-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <span class="badge bg-primary" id="practiceModeBadge">
+                            <i class="fas fa-sort-amount-down"></i> Ordenar Componentes
+                        </span>
+                    </h5>
+                    <div>
+                        <span class="badge bg-info me-2" id="exerciseCounter">
+                            <i class="fas fa-hashtag"></i> <span id="currentExercise">1</span>/<span id="totalExercises">100</span>
+                        </span>
+                        <span class="badge bg-warning" id="difficultyBadge">
+                            <i class="fas fa-chart-bar"></i> Intermedio
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card-body p-4">
+                <!-- Frase en español (para traducción) -->
+                <div id="spanishSentenceContainer" class="text-center mb-4" style="display: none;">
+                    <p class="lead mb-2">Frase en español:</p>
+                    <h4 class="fw-bold text-primary" id="spanishSentence"></h4>
+                </div>
+                
+                <!-- Componentes desordenados (para ordenar) -->
+                <div id="componentsContainer" class="mb-4">
+                    <p class="text-muted mb-2">Componentes disponibles:</p>
+                    <div class="d-flex flex-wrap gap-2 justify-content-center" id="componentsList"></div>
+                </div>
+                
+                <!-- Área de orden seleccionado -->
+                <div id="selectedOrderContainer" class="mb-4">
+                    <p class="text-muted mb-2">Tu orden:</p>
+                    <div class="min-height-100 p-3 bg-light rounded-3 d-flex flex-wrap gap-2 align-items-center" id="selectedOrder">
+                        <em class="text-muted">Haz clic en los componentes para ordenarlos</em>
+                    </div>
+                </div>
+                
+                <!-- Área de entrada de texto (para traducción/reescritura) -->
+                <div id="textInputContainer" class="mb-4" style="display: none;">
+                    <label class="form-label fw-bold">Tu respuesta:</label>
+                    <textarea class="form-control" id="textAnswer" rows="3" placeholder="Escribe tu respuesta aquí..."></textarea>
+                </div>
+                
+                <!-- Pista -->
+                <div class="alert alert-info mb-4" id="hintContainer" style="display: none;">
+                    <i class="fas fa-lightbulb me-2"></i>
+                    <span id="hintText"></span>
+                </div>
+                
+                <!-- Botones de acción (solo 3) -->
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <button class="btn btn-success w-100 py-3" id="checkBtn" onclick="checkAnswer()">
+                            <i class="fas fa-check-circle"></i> Verificar
+                        </button>
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-warning w-100 py-3" id="resetBtn" onclick="resetExercise()">
+                            <i class="fas fa-redo-alt"></i> Reiniciar
+                        </button>
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-info w-100 py-3" id="nextBtn" onclick="nextExercise()">
+                            <i class="fas fa-forward"></i> Siguiente
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Resultado -->
+                <div class="mt-4" id="resultArea"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Estadísticas de práctica -->
+<div class="row mb-4">
+    <div class="col-md-3 col-6 mb-3">
+        <div class="card stat-card h-100 border-start border-primary border-4">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-check-circle fa-2x text-primary"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="text-muted mb-1">Aciertos</h6>
+                        <h4 class="mb-0 fw-bold" id="correctCount">0</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 col-6 mb-3">
+        <div class="card stat-card h-100 border-start border-danger border-4">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-times-circle fa-2x text-danger"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="text-muted mb-1">Errores</h6>
+                        <h4 class="mb-0 fw-bold" id="errorCount">0</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 col-6 mb-3">
+        <div class="card stat-card h-100 border-start border-success border-4">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-chart-line fa-2x text-success"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="text-muted mb-1">Precisión</h6>
+                        <h4 class="mb-0 fw-bold" id="accuracyDisplay">0%</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 col-6 mb-3">
+        <div class="card stat-card h-100 border-start border-warning border-4">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-fire fa-2x text-warning"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="text-muted mb-1">Racha</h6>
+                        <h4 class="mb-0 fw-bold" id="streakDisplay">0</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Historial rápido de últimos intentos -->
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow">
+            <div class="card-header bg-white">
+                <h5 class="mb-0"><i class="fas fa-history me-2"></i>Últimos Intentos</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover" id="recentAttempts">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Tipo</th>
+                                <th>Respuesta</th>
+                                <th>Resultado</th>
+                                <th>Hora</th>
+                            </tr>
+                        </thead>
+                        <tbody id="attemptsBody">
+                            <tr>
+                                <td colspan="5" class="text-center text-muted">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    No hay intentos recientes
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #4a6fa5 0%, #6b4e71 100%);
+    }
+    
+    .stat-card {
+        transition: all 0.3s ease;
+        border-left-width: 4px !important;
+    }
+    
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+    
+    .btn-mode {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border: 2px solid transparent;
+        transition: all 0.3s ease;
+        color: #495057;
+    }
+    
+    .btn-mode:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        border-color: #4a6fa5;
+    }
+    
+    .btn-mode.active {
+        background: linear-gradient(135deg, #4a6fa5 0%, #6b4e71 100%);
+        color: white;
+        border-color: #4a6fa5;
+    }
+    
+    .btn-mode i {
+        font-size: 2rem;
+    }
+    
+    .component-btn {
+        transition: all 0.2s ease;
+        font-size: 1rem;
+        padding: 0.5rem 1rem;
+    }
+    
+    .component-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+    
+    .component-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    
+    .min-height-100 {
+        min-height: 100px;
+    }
+    
+    #selectedOrder .badge {
+        font-size: 1rem;
+        padding: 0.8rem 1.2rem;
+        animation: slideIn 0.3s ease;
+    }
+    
+    @keyframes slideIn {
+        from {
+            transform: translateX(-10px);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+    
+    .correct-flash {
+        animation: correctFlash 0.5s ease;
+    }
+    
+    @keyframes correctFlash {
+        0% { background-color: #d4edda; }
+        70% { background-color: #d4edda; }
+        100% { background-color: transparent; }
+    }
+    
+    .incorrect-flash {
+        animation: incorrectFlash 0.5s ease;
+    }
+    
+    @keyframes incorrectFlash {
+        0% { background-color: #f8d7da; }
+        70% { background-color: #f8d7da; }
+        100% { background-color: transparent; }
+    }
+    
+    .badge {
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        font-size: 0.9rem;
+    }
+    
+    .table td {
+        vertical-align: middle;
+    }
+    
+    .feedback-popup {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 9999;
+        animation: popIn 0.3s ease;
+    }
+    
+    @keyframes popIn {
+        from {
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 0;
+        }
+        to {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+    }
+</style>
+
+<script>
+    // Variables globales
+    let currentMode = 'order';
+    let currentSentence = null;
+    let selectedComponents = [];
+    let score = 0;
+    let correctCount = 0;
+    let errorCount = 0;
+    let streak = 0;
+    let recentAttempts = [];
+    let exercises = [];
+    
+    // Inicialización
+    document.addEventListener('DOMContentLoaded', function() {
+        loadExercises();
+        updateUI();
+    });
+    
+    function loadExercises() {
+        fetch('/api/exercises/all')
+            .then(response => response.json())
+            .then(data => {
+                exercises = data;
+                document.getElementById('totalExercises').textContent = exercises.length;
+                nextExercise();
+            })
+            .catch(error => {
+                console.error('Error loading exercises:', error);
+            });
+    }
+    
+    function setMode(mode) {
+        currentMode = mode;
+        
+        // Actualizar botones
+        document.querySelectorAll('.btn-mode').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(`mode${mode.charAt(0).toUpperCase() + mode.slice(1)}`).classList.add('active');
+        
+        // Actualizar UI según modo
+        updateUI();
+        resetExercise();
+    }
+    
+    function updateUI() {
+        const modeNames = {
+            'order': 'Ordenar Componentes',
+            'translation': 'Traducción',
+            'rewrite': 'Reescribir'
+        };
+        
+        const modeIcons = {
+            'order': 'fa-sort-amount-down',
+            'translation': 'fa-language',
+            'rewrite': 'fa-edit'
+        };
+        
+        document.getElementById('practiceModeBadge').innerHTML = 
+            `<i class="fas ${modeIcons[currentMode]} me-2"></i>${modeNames[currentMode]}`;
+        
+        // Mostrar/ocultar elementos según modo
+        if (currentMode === 'order') {
+            document.getElementById('componentsContainer').style.display = 'block';
+            document.getElementById('selectedOrderContainer').style.display = 'block';
+            document.getElementById('spanishSentenceContainer').style.display = 'none';
+            document.getElementById('textInputContainer').style.display = 'none';
+        } else if (currentMode === 'translation') {
+            document.getElementById('componentsContainer').style.display = 'none';
+            document.getElementById('selectedOrderContainer').style.display = 'none';
+            document.getElementById('spanishSentenceContainer').style.display = 'block';
+            document.getElementById('textInputContainer').style.display = 'block';
+        } else if (currentMode === 'rewrite') {
+            document.getElementById('componentsContainer').style.display = 'none';
+            document.getElementById('selectedOrderContainer').style.display = 'none';
+            document.getElementById('spanishSentenceContainer').style.display = 'block';
+            document.getElementById('textInputContainer').style.display = 'block';
+        }
+    }
+    
+    function nextExercise() {
+        if (exercises.length === 0) return;
+        
+        // Obtener ejercicio aleatorio
+        const randomIndex = Math.floor(Math.random() * exercises.length);
+        currentSentence = exercises[randomIndex];
+        
+        document.getElementById('currentExercise').textContent = randomIndex + 1;
+        document.getElementById('difficultyBadge').innerHTML = 
+            `<i class="fas fa-chart-bar"></i> ${currentSentence.difficulty || 'Intermedio'}`;
+        document.getElementById('difficultyBadge').className = 'badge bg-' + 
+            (currentSentence.difficulty === 'easy' ? 'success' : 
+             currentSentence.difficulty === 'intermediate' ? 'warning' : 'danger');
+        
+        if (currentSentence.hint) {
+            document.getElementById('hintText').textContent = currentSentence.hint;
+            document.getElementById('hintContainer').style.display = 'block';
+        } else {
+            document.getElementById('hintContainer').style.display = 'none';
+        }
+        
+        // Configurar según modo
+        if (currentMode === 'order') {
+            setupOrderExercise();
+        } else if (currentMode === 'translation') {
+            setupTranslationExercise();
+        } else if (currentMode === 'rewrite') {
+            setupRewriteExercise();
+        }
+        
+        // Limpiar resultado anterior
+        document.getElementById('resultArea').innerHTML = '';
+        document.getElementById('checkBtn').disabled = false;
+    }
+    
+    function setupOrderExercise() {
+        document.getElementById('spanishSentence').textContent = currentSentence.spanish;
+        
+        // Mezclar componentes
+        const shuffled = [...currentSentence.components].sort(() => Math.random() - 0.5);
+        
+        // Crear botones
+        const container = document.getElementById('componentsList');
+        container.innerHTML = '';
+        shuffled.forEach(comp => {
+            const btn = document.createElement('button');
+            btn.className = 'btn btn-outline-primary component-btn m-1';
+            btn.textContent = comp;
+            btn.onclick = () => addToSelected(comp, btn);
+            container.appendChild(btn);
+        });
+        
+        // Limpiar selección
+        selectedComponents = [];
+        updateSelectedDisplay();
+    }
+    
+    function setupTranslationExercise() {
+        document.getElementById('spanishSentence').textContent = currentSentence.spanish;
+        document.getElementById('textAnswer').value = '';
+    }
+    
+    function setupRewriteExercise() {
+        // Crear versión desordenada
+        const components = currentSentence.components;
+        const badOrder = [components[0], components[1], components[3], components[2]].join(' ');
+        document.getElementById('spanishSentence').textContent = badOrder;
+        document.getElementById('textAnswer').value = '';
+    }
+    
+    function addToSelected(component, btn) {
+        if (selectedComponents.length < 4 && !selectedComponents.includes(component)) {
+            selectedComponents.push(component);
+            btn.disabled = true;
+            updateSelectedDisplay();
+        }
+    }
+    
+    function updateSelectedDisplay() {
+        const container = document.getElementById('selectedOrder');
+        container.innerHTML = '';
+        
+        if (selectedComponents.length === 0) {
+            container.innerHTML = '<em class="text-muted">Haz clic en los componentes para ordenarlos</em>';
+        } else {
+            selectedComponents.forEach((comp, i) => {
+                const badge = document.createElement('span');
+                badge.className = 'badge bg-primary p-3';
+                badge.textContent = `${i+1}. ${comp}`;
+                container.appendChild(badge);
+            });
+        }
+    }
+    
+    function checkAnswer() {
+        let isCorrect = false;
+        let correctAnswer = '';
+        let userAnswer = '';
+        
+        if (currentMode === 'order') {
+            userAnswer = selectedComponents.join(' ');
+            correctAnswer = currentSentence.components.join(' ');
+            isCorrect = userAnswer === correctAnswer;
+        } else if (currentMode === 'translation') {
+            userAnswer = document.getElementById('textAnswer').value.trim();
+            correctAnswer = currentSentence.english;
+            isCorrect = userAnswer.toLowerCase() === correctAnswer.toLowerCase();
+        } else if (currentMode === 'rewrite') {
+            userAnswer = document.getElementById('textAnswer').value.trim();
+            correctAnswer = currentSentence.components.join(' ');
+            isCorrect = userAnswer.toLowerCase() === correctAnswer.toLowerCase();
+        }
+        
+        // Actualizar estadísticas
+        if (isCorrect) {
+            correctCount++;
+            streak++;
+            score += 10;
+            showResult('correct', '¡Excelente! +10 puntos');
+        } else {
+            errorCount++;
+            streak = 0;
+            score = Math.max(0, score - 5);
+            showResult('incorrect', `Incorrecto. La respuesta correcta es: "${correctAnswer}"`);
+        }
+        
+        // Actualizar displays
+        updateStats();
+        addToRecentAttempts(isCorrect, userAnswer);
+        document.getElementById('checkBtn').disabled = true;
+        
+        // Efecto visual
+        const container = document.getElementById('practiceContainer');
+        container.classList.add(isCorrect ? 'correct-flash' : 'incorrect-flash');
+        setTimeout(() => {
+            container.classList.remove('correct-flash', 'incorrect-flash');
+        }, 500);
+    }
+    
+    function showResult(type, message) {
+        const resultArea = document.getElementById('resultArea');
+        resultArea.innerHTML = `
+            <div class="alert alert-${type === 'correct' ? 'success' : 'danger'} alert-dismissible fade show">
+                <i class="fas fa-${type === 'correct' ? 'check-circle' : 'exclamation-circle'} me-2"></i>
+                ${message}
+                <button type="button" class="btn-close" onclick="this.parentElement.remove()"></button>
+            </div>
+        `;
+    }
+    
+    function resetExercise() {
+        if (currentMode === 'order') {
+            selectedComponents = [];
+            document.querySelectorAll('.component-btn').forEach(btn => {
+                btn.disabled = false;
+            });
+            updateSelectedDisplay();
+        } else {
+            document.getElementById('textAnswer').value = '';
+        }
+        document.getElementById('resultArea').innerHTML = '';
+        document.getElementById('checkBtn').disabled = false;
+    }
+    
+    function updateStats() {
+        document.getElementById('scoreDisplay').textContent = score;
+        document.getElementById('correctCount').textContent = correctCount;
+        document.getElementById('errorCount').textContent = errorCount;
+        
+        const accuracy = correctCount + errorCount > 0 
+            ? Math.round((correctCount / (correctCount + errorCount)) * 100) 
+            : 0;
+        document.getElementById('accuracyDisplay').textContent = accuracy + '%';
+        document.getElementById('streakDisplay').textContent = streak;
+    }
+    
+    function addToRecentAttempts(isCorrect, answer) {
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString();
+        
+        recentAttempts.unshift({
+            type: currentMode,
+            answer: answer.substring(0, 30) + (answer.length > 30 ? '...' : ''),
+            result: isCorrect ? 'correcto' : 'incorrecto',
+            time: timeStr
+        });
+        
+        if (recentAttempts.length > 5) {
+            recentAttempts.pop();
+        }
+        
+        updateRecentAttempts();
+    }
+    
+    function updateRecentAttempts() {
+        const tbody = document.getElementById('attemptsBody');
+        
+        if (recentAttempts.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="5" class="text-center text-muted">
+                        <i class="fas fa-info-circle me-2"></i>
+                        No hay intentos recientes
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+        
+        tbody.innerHTML = recentAttempts.map((attempt, index) => `
+            <tr>
+                <td>${index + 1}</td>
+                <td>${attempt.type}</td>
+                <td>${attempt.answer}</td>
+                <td>
+                    <span class="badge bg-${attempt.result === 'correcto' ? 'success' : 'danger'}">
+                        ${attempt.result}
+                    </span>
+                </td>
+                <td>${attempt.time}</td>
+            </tr>
+        `).join('');
+    }
+</script>
+{% endblock %}

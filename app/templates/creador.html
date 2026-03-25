@@ -1,0 +1,994 @@
+{% extends "base.html" %}
+
+{% block title %}Creador de Ejercicios - Escritor de Frases Claras{% endblock %}
+
+{% block content %}
+<!-- Encabezado -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card bg-gradient-creator text-white border-0 shadow">
+            <div class="card-body p-4">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h2 class="display-5 fw-bold mb-3">
+                            <i class="fas fa-plus-circle me-2"></i> 
+                            Creador de Ejercicios JSON
+                        </h2>
+                        <p class="lead mb-0 opacity-90">
+                            <i class="fas fa-code me-2"></i>
+                            Crea hasta 100+ ejercicios personalizados para practicar
+                        </p>
+                    </div>
+                    <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                        <div class="d-inline-block bg-white bg-opacity-25 rounded-3 p-3">
+                            <i class="fas fa-database fa-2x mb-2"></i>
+                            <h3 class="mb-0" id="exerciseCounter">0/100</h3>
+                            <small>Ejercicios creados</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Estadísticas rápidas -->
+<div class="row mb-4">
+    <div class="col-xl-3 col-md-6 mb-3">
+        <div class="card stat-card h-100 border-start border-primary border-4">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-tag fa-2x text-primary"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="text-muted mb-1">Categorías</h6>
+                        <h4 class="mb-0 fw-bold" id="categoryCount">0</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-3">
+        <div class="card stat-card h-100 border-start border-success border-4">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-chart-bar fa-2x text-success"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="text-muted mb-1">Dificultades</h6>
+                        <h4 class="mb-0 fw-bold" id="difficultyCount">3</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-3">
+        <div class="card stat-card h-100 border-start border-warning border-4">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-pencil-alt fa-2x text-warning"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="text-muted mb-1">Tipos</h6>
+                        <h4 class="mb-0 fw-bold" id="typeCount">3</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-3">
+        <div class="card stat-card h-100 border-start border-info border-4">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-save fa-2x text-info"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="text-muted mb-1">Guardados</h6>
+                        <h4 class="mb-0 fw-bold" id="savedCount">0</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Pestañas de creación -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card shadow">
+            <div class="card-header bg-white">
+                <ul class="nav nav-tabs card-header-tabs" id="creatorTabs" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="single-tab" data-bs-toggle="tab" href="#single">
+                            <i class="fas fa-plus-circle"></i> Crear Individual
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="batch-tab" data-bs-toggle="tab" href="#batch">
+                            <i class="fas fa-layer-group"></i> Creación Masiva
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="import-tab" data-bs-toggle="tab" href="#import">
+                            <i class="fas fa-file-import"></i> Importar JSON
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="templates-tab" data-bs-toggle="tab" href="#templates">
+                            <i class="fas fa-copy"></i> Plantillas
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="preview-tab" data-bs-toggle="tab" href="#preview">
+                            <i class="fas fa-eye"></i> Vista Previa
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="card-body">
+                <div class="tab-content">
+                    <!-- Pestaña: Crear Individual -->
+                    <div class="tab-pane fade show active" id="single">
+                        <form id="singleExerciseForm">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">
+                                        <i class="fas fa-tag text-primary"></i> ID del ejercicio
+                                    </label>
+                                    <input type="number" class="form-control" id="exerciseId" 
+                                           placeholder="Ej: 1" min="1" max="1000">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">
+                                        <i class="fas fa-font text-success"></i> Tipo
+                                    </label>
+                                    <select class="form-select" id="exerciseType">
+                                        <option value="order">Orden de componentes</option>
+                                        <option value="translation">Traducción</option>
+                                        <option value="rewrite">Reescritura</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="col-12">
+                                    <label class="form-label fw-bold">
+                                        <i class="fas fa-language text-info"></i> Frase en español
+                                    </label>
+                                    <input type="text" class="form-control" id="spanishText" 
+                                           placeholder="Ej: El profesor explicó a los estudiantes los conceptos complejos">
+                                </div>
+                                
+                                <div class="col-12">
+                                    <label class="form-label fw-bold">
+                                        <i class="fas fa-language text-warning"></i> Traducción al inglés
+                                    </label>
+                                    <input type="text" class="form-control" id="englishText" 
+                                           placeholder="Ej: The teacher explained to the students the complex concepts">
+                                </div>
+                                
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">
+                                        <i class="fas fa-user text-primary"></i> QUIÉN
+                                    </label>
+                                    <input type="text" class="form-control" id="componentQuien" 
+                                           placeholder="Ej: El profesor">
+                                </div>
+                                
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">
+                                        <i class="fas fa-running text-success"></i> VERBO
+                                    </label>
+                                    <input type="text" class="form-control" id="componentVerbo" 
+                                           placeholder="Ej: explicó">
+                                </div>
+                                
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">
+                                        <i class="fas fa-user-friends text-warning"></i> A QUIÉN
+                                    </label>
+                                    <input type="text" class="form-control" id="componentAQuien" 
+                                           placeholder="Ej: a los estudiantes">
+                                </div>
+                                
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">
+                                        <i class="fas fa-book text-info"></i> QUÉ
+                                    </label>
+                                    <input type="text" class="form-control" id="componentQue" 
+                                           placeholder="Ej: los conceptos complejos">
+                                </div>
+                                
+                                <div class="col-md-4">
+                                    <label class="form-label fw-bold">
+                                        <i class="fas fa-folder text-primary"></i> Categoría
+                                    </label>
+                                    <input type="text" class="form-control" id="category" 
+                                           placeholder="Ej: educación" list="categoryList">
+                                    <datalist id="categoryList"></datalist>
+                                </div>
+                                
+                                <div class="col-md-4">
+                                    <label class="form-label fw-bold">
+                                        <i class="fas fa-chart-bar text-success"></i> Dificultad
+                                    </label>
+                                    <select class="form-select" id="difficulty">
+                                        <option value="easy">Fácil</option>
+                                        <option value="intermediate" selected>Intermedio</option>
+                                        <option value="advanced">Avanzado</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="col-md-4">
+                                    <label class="form-label fw-bold">
+                                        <i class="fas fa-lightbulb text-warning"></i> Pista
+                                    </label>
+                                    <input type="text" class="form-control" id="hint" 
+                                           placeholder="Ej: El complemento indirecto va primero">
+                                </div>
+                                
+                                <div class="col-12">
+                                    <label class="form-label fw-bold">
+                                        <i class="fas fa-tags text-info"></i> Tags (separados por comas)
+                                    </label>
+                                    <input type="text" class="form-control" id="tags" 
+                                           placeholder="Ej: educación, verbos, clase">
+                                </div>
+                                
+                                <div class="col-12 text-center">
+                                    <button type="button" class="btn btn-primary btn-lg px-5" onclick="addExercise()">
+                                        <i class="fas fa-plus-circle"></i> Agregar Ejercicio
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <!-- Pestaña: Creación Masiva -->
+                    <div class="tab-pane fade" id="batch">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">
+                                    <i class="fas fa-list-ol text-primary"></i> Cantidad a generar
+                                </label>
+                                <input type="number" class="form-control" id="batchCount" 
+                                       value="10" min="1" max="100">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">
+                                    <i class="fas fa-random text-success"></i> Modo de generación
+                                </label>
+                                <select class="form-select" id="batchMode">
+                                    <option value="random">Aleatorio</option>
+                                    <option value="pattern">Basado en patrones</option>
+                                    <option value="template">Desde plantillas</option>
+                                </select>
+                            </div>
+                            
+                            <div class="col-12">
+                                <label class="form-label fw-bold">
+                                    <i class="fas fa-palette text-info"></i> Patrones de frases
+                                </label>
+                                <textarea class="form-control" id="batchPatterns" rows="5" 
+                                          placeholder="[SUJETO] [VERBO] a [PERSONA] [OBJETO]&#10;[SUJETO] explicó a [ESTUDIANTES] [CONCEPTOS]&#10;[SUJETO] entregó a [RECEPTOR] [COSAS]"></textarea>
+                            </div>
+                            
+                            <div class="col-12 text-center">
+                                <button type="button" class="btn btn-success btn-lg px-5" onclick="generateBatch()">
+                                    <i class="fas fa-cogs"></i> Generar Ejercicios
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Pestaña: Importar JSON -->
+                    <div class="tab-pane fade" id="import">
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label class="form-label fw-bold">
+                                    <i class="fas fa-file-code text-primary"></i> Pegar JSON
+                                </label>
+                                <textarea class="form-control" id="importJson" rows="10" 
+                                          placeholder='[{"id": 1, "spanish": "...", ...}]'></textarea>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">
+                                    <i class="fas fa-upload text-success"></i> Subir archivo
+                                </label>
+                                <input type="file" class="form-control" id="jsonFile" 
+                                       accept=".json,application/json">
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">
+                                    <i class="fas fa-link text-warning"></i> URL del JSON
+                                </label>
+                                <input type="url" class="form-control" id="jsonUrl" 
+                                       placeholder="https://ejemplo.com/ejercicios.json">
+                            </div>
+                            
+                            <div class="col-12 text-center">
+                                <button type="button" class="btn btn-warning btn-lg px-5" onclick="importJson()">
+                                    <i class="fas fa-file-import"></i> Importar
+                                </button>
+                                <button type="button" class="btn btn-info btn-lg px-5" onclick="validateJson()">
+                                    <i class="fas fa-check-circle"></i> Validar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Pestaña: Plantillas -->
+                    <div class="tab-pane fade" id="templates">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <div class="card template-card" onclick="loadTemplate('education')">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-graduation-cap fa-3x text-primary mb-3"></i>
+                                        <h5>Educación</h5>
+                                        <p class="small text-muted">20 plantillas</p>
+                                        <span class="badge bg-primary">Frases académicas</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <div class="card template-card" onclick="loadTemplate('business')">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-briefcase fa-3x text-success mb-3"></i>
+                                        <h5>Negocios</h5>
+                                        <p class="small text-muted">15 plantillas</p>
+                                        <span class="badge bg-success">Entorno laboral</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <div class="card template-card" onclick="loadTemplate('health')">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-heartbeat fa-3x text-danger mb-3"></i>
+                                        <h5>Salud</h5>
+                                        <p class="small text-muted">12 plantillas</p>
+                                        <span class="badge bg-danger">Contexto médico</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <div class="card template-card" onclick="loadTemplate('travel')">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-plane fa-3x text-info mb-3"></i>
+                                        <h5>Viajes</h5>
+                                        <p class="small text-muted">10 plantillas</p>
+                                        <span class="badge bg-info">Turismo y viajes</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <div class="card template-card" onclick="loadTemplate('technology')">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-laptop-code fa-3x text-warning mb-3"></i>
+                                        <h5>Tecnología</h5>
+                                        <p class="small text-muted">8 plantillas</p>
+                                        <span class="badge bg-warning">Mundo digital</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <div class="card template-card" onclick="loadTemplate('daily')">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-home fa-3x text-secondary mb-3"></i>
+                                        <h5>Vida Diaria</h5>
+                                        <p class="small text-muted">25 plantillas</p>
+                                        <span class="badge bg-secondary">Situaciones cotidianas</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Pestaña: Vista Previa -->
+                    <div class="tab-pane fade" id="preview">
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <div class="btn-group w-100">
+                                    <button class="btn btn-outline-primary" onclick="previewMode('grid')">
+                                        <i class="fas fa-th"></i> Grid
+                                    </button>
+                                    <button class="btn btn-outline-primary" onclick="previewMode('list')">
+                                        <i class="fas fa-list"></i> Lista
+                                    </button>
+                                    <button class="btn btn-outline-primary" onclick="previewMode('json')">
+                                        <i class="fas fa-code"></i> JSON
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="previewContainer"></div>
+                        
+                        <div class="text-center mt-3">
+                            <button class="btn btn-success btn-lg" onclick="saveToDatabase()">
+                                <i class="fas fa-database"></i> Guardar en Base de Datos
+                            </button>
+                            <button class="btn btn-primary btn-lg" onclick="exportJson()">
+                                <i class="fas fa-download"></i> Exportar JSON
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Lista de ejercicios creados -->
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="fas fa-list me-2"></i>Ejercicios Creados (<span id="exercisesCount">0</span>)
+                </h5>
+                <div>
+                    <button class="btn btn-sm btn-outline-danger" onclick="clearAll()">
+                        <i class="fas fa-trash"></i> Limpiar Todo
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover" id="exercisesTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Español</th>
+                                <th>Inglés</th>
+                                <th>Categoría</th>
+                                <th>Dificultad</th>
+                                <th>Componentes</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="exercisesBody">
+                            <tr>
+                                <td colspan="7" class="text-center text-muted">
+                                    <i class="fas fa-inbox fa-3x mb-3"></i>
+                                    <p>No hay ejercicios creados aún</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-gradient-creator {
+        background: linear-gradient(135deg, #6a1b9a 0%, #8e24aa 100%);
+    }
+    
+    .stat-card {
+        transition: all 0.3s ease;
+        border-left-width: 4px !important;
+    }
+    
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+    
+    .nav-tabs .nav-link {
+        color: #495057;
+        border: none;
+        padding: 1rem 1.5rem;
+        transition: all 0.3s ease;
+    }
+    
+    .nav-tabs .nav-link:hover {
+        border: none;
+        background: rgba(74, 111, 165, 0.1);
+    }
+    
+    .nav-tabs .nav-link.active {
+        color: #4a6fa5;
+        background: transparent;
+        border-bottom: 3px solid #4a6fa5;
+    }
+    
+    .template-card {
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+    }
+    
+    .template-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        border-color: #4a6fa5;
+    }
+    
+    .exercise-item {
+        transition: all 0.2s ease;
+    }
+    
+    .exercise-item:hover {
+        background: #f8f9fa;
+        transform: translateX(5px);
+    }
+    
+    .preview-card {
+        transition: all 0.3s ease;
+    }
+    
+    .preview-card:hover {
+        transform: scale(1.02);
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        z-index: 10;
+    }
+    
+    .btn-group {
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+</style>
+
+<script>
+    // Variables globales
+    let exercises = [];
+    let nextId = 1;
+    
+    // Cargar datos guardados al iniciar
+    document.addEventListener('DOMContentLoaded', function() {
+        loadSavedExercises();
+        updateCategoriesList();
+    });
+    
+    function loadSavedExercises() {
+        const saved = localStorage.getItem('exercises');
+        if (saved) {
+            exercises = JSON.parse(saved);
+            nextId = exercises.length > 0 ? Math.max(...exercises.map(e => e.id)) + 1 : 1;
+            updateExercisesList();
+            updateStats();
+        }
+    }
+    
+    function addExercise() {
+        const exercise = {
+            id: document.getElementById('exerciseId').value || nextId++,
+            type: document.getElementById('exerciseType').value,
+            spanish: document.getElementById('spanishText').value,
+            english: document.getElementById('englishText').value,
+            components: [
+                document.getElementById('componentQuien').value,
+                document.getElementById('componentVerbo').value,
+                document.getElementById('componentAQuien').value,
+                document.getElementById('componentQue').value
+            ],
+            category: document.getElementById('category').value || 'general',
+            difficulty: document.getElementById('difficulty').value,
+            hint: document.getElementById('hint').value,
+            tags: document.getElementById('tags').value.split(',').map(t => t.trim())
+        };
+        
+        // Validar campos requeridos
+        if (!exercise.spanish || !exercise.english || !exercise.components[0]) {
+            showNotification('Por favor complete los campos requeridos', 'danger');
+            return;
+        }
+        
+        exercises.push(exercise);
+        saveExercises();
+        clearForm();
+        showNotification('Ejercicio agregado correctamente', 'success');
+    }
+    
+    function clearForm() {
+        document.getElementById('spanishText').value = '';
+        document.getElementById('englishText').value = '';
+        document.getElementById('componentQuien').value = '';
+        document.getElementById('componentVerbo').value = '';
+        document.getElementById('componentAQuien').value = '';
+        document.getElementById('componentQue').value = '';
+        document.getElementById('hint').value = '';
+        document.getElementById('tags').value = '';
+        document.getElementById('exerciseId').value = nextId;
+    }
+    
+    function generateBatch() {
+        const count = parseInt(document.getElementById('batchCount').value);
+        const mode = document.getElementById('batchMode').value;
+        
+        // Patrones predefinidos
+        const subjects = ['El profesor', 'La doctora', 'El ingeniero', 'La empresa', 'El gobierno', 'La organización'];
+        const verbs = ['explicó', 'enseñó', 'mostró', 'entregó', 'envió', 'ofreció'];
+        const recipients = ['a los estudiantes', 'a los pacientes', 'a los clientes', 'a los trabajadores', 'a la comunidad'];
+        const objects = [
+            'los conceptos complejos', 'el nuevo tratamiento', 'los resultados del estudio',
+            'un paquete de beneficios', 'las políticas actualizadas', 'material educativo'
+        ];
+        const categories = ['educación', 'salud', 'tecnología', 'negocios', 'gobierno', 'social'];
+        
+        for (let i = 0; i < count; i++) {
+            const subject = subjects[Math.floor(Math.random() * subjects.length)];
+            const verb = verbs[Math.floor(Math.random() * verbs.length)];
+            const recipient = recipients[Math.floor(Math.random() * recipients.length)];
+            const object = objects[Math.floor(Math.random() * objects.length)];
+            const category = categories[Math.floor(Math.random() * categories.length)];
+            
+            const spanish = `${subject} ${verb} ${recipient} ${object}`;
+            const english = `${subject} ${verb} ${recipient} ${object}`; // Simplificado
+            
+            const exercise = {
+                id: nextId++,
+                type: 'order',
+                spanish: spanish,
+                english: english,
+                components: [subject, verb, recipient, object],
+                category: category,
+                difficulty: ['easy', 'intermediate', 'advanced'][Math.floor(Math.random() * 3)],
+                hint: `Ordena los componentes: ${subject} + ${verb} + ${recipient} + ${object}`,
+                tags: [category, 'generado']
+            };
+            
+            exercises.push(exercise);
+        }
+        
+        saveExercises();
+        showNotification(`${count} ejercicios generados correctamente`, 'success');
+    }
+    
+    function loadTemplate(templateName) {
+        const templates = {
+            'education': [
+                {
+                    subject: 'El profesor',
+                    verb: 'explicó',
+                    recipient: 'a los estudiantes',
+                    object: 'los conceptos de física',
+                    category: 'educación',
+                    difficulty: 'intermediate'
+                },
+                {
+                    subject: 'La universidad',
+                    verb: 'ofreció',
+                    recipient: 'a los becarios',
+                    object: 'programas de intercambio',
+                    category: 'educación',
+                    difficulty: 'easy'
+                }
+            ],
+            'business': [
+                {
+                    subject: 'La empresa',
+                    verb: 'envió',
+                    recipient: 'a sus clientes',
+                    object: 'un boletín informativo',
+                    category: 'negocios',
+                    difficulty: 'easy'
+                }
+            ],
+            'health': [
+                {
+                    subject: 'El médico',
+                    verb: 'recetó',
+                    recipient: 'a los pacientes',
+                    object: 'medicamentos genéricos',
+                    category: 'salud',
+                    difficulty: 'intermediate'
+                }
+            ]
+        };
+        
+        const template = templates[templateName];
+        if (template) {
+            template.forEach((item, index) => {
+                const exercise = {
+                    id: nextId++,
+                    type: 'order',
+                    spanish: `${item.subject} ${item.verb} ${item.recipient} ${item.object}`,
+                    english: `${item.subject} ${item.verb} ${item.recipient} ${item.object}`,
+                    components: [item.subject, item.verb, item.recipient, item.object],
+                    category: item.category,
+                    difficulty: item.difficulty,
+                    hint: `Orden: ${item.subject} + ${item.verb} + ${item.recipient} + ${item.object}`,
+                    tags: [item.category, 'plantilla']
+                };
+                exercises.push(exercise);
+            });
+            
+            saveExercises();
+            showNotification(`Plantilla "${templateName}" cargada correctamente`, 'success');
+        }
+    }
+    
+    function importJson() {
+        try {
+            const jsonText = document.getElementById('importJson').value;
+            const imported = JSON.parse(jsonText);
+            
+            if (Array.isArray(imported)) {
+                imported.forEach(item => {
+                    if (item.spanish && item.english && item.components) {
+                        item.id = nextId++;
+                        exercises.push(item);
+                    }
+                });
+                saveExercises();
+                showNotification(`${imported.length} ejercicios importados`, 'success');
+            }
+        } catch (error) {
+            showNotification('Error al importar JSON: ' + error.message, 'danger');
+        }
+    }
+    
+    function validateJson() {
+        try {
+            const jsonText = document.getElementById('importJson').value;
+            JSON.parse(jsonText);
+            showNotification('JSON válido', 'success');
+        } catch (error) {
+            showNotification('JSON inválido: ' + error.message, 'danger');
+        }
+    }
+    
+    function saveExercises() {
+        localStorage.setItem('exercises', JSON.stringify(exercises));
+        updateExercisesList();
+        updateStats();
+        updatePreview();
+    }
+    
+    function updateExercisesList() {
+        const tbody = document.getElementById('exercisesBody');
+        const counter = document.getElementById('exercisesCount');
+        
+        if (exercises.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="7" class="text-center text-muted">
+                        <i class="fas fa-inbox fa-3x mb-3"></i>
+                        <p>No hay ejercicios creados aún</p>
+                    </td>
+                </tr>
+            `;
+            counter.textContent = '0';
+            return;
+        }
+        
+        counter.textContent = exercises.length;
+        
+        tbody.innerHTML = exercises.map(ex => `
+            <tr class="exercise-item">
+                <td>${ex.id}</td>
+                <td>${ex.spanish.substring(0, 50)}${ex.spanish.length > 50 ? '...' : ''}</td>
+                <td>${ex.english.substring(0, 50)}${ex.english.length > 50 ? '...' : ''}</td>
+                <td><span class="badge bg-primary">${ex.category || 'general'}</span></td>
+                <td>
+                    <span class="badge bg-${ex.difficulty === 'easy' ? 'success' : 
+                                           ex.difficulty === 'intermediate' ? 'warning' : 'danger'}">
+                        ${ex.difficulty || 'intermediate'}
+                    </span>
+                </td>
+                <td>
+                    <button class="btn btn-sm btn-outline-info" onclick="showComponents(${ex.id})">
+                        <i class="fas fa-eye"></i> Ver
+                    </button>
+                </td>
+                <td>
+                    <button class="btn btn-sm btn-outline-warning" onclick="editExercise(${ex.id})">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger" onclick="deleteExercise(${ex.id})">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        `).join('');
+    }
+    
+    function updateStats() {
+        document.getElementById('exerciseCounter').textContent = exercises.length + '/100';
+        document.getElementById('savedCount').textContent = exercises.length;
+        
+        // Contar categorías únicas
+        const categories = new Set(exercises.map(e => e.category));
+        document.getElementById('categoryCount').textContent = categories.size;
+    }
+    
+    function updatePreview() {
+        const container = document.getElementById('previewContainer');
+        const mode = document.querySelector('.btn-group .btn.active')?.textContent.toLowerCase() || 'grid';
+        
+        if (mode.includes('grid')) {
+            showGridPreview();
+        } else if (mode.includes('lista')) {
+            showListPreview();
+        } else {
+            showJsonPreview();
+        }
+    }
+    
+    function showGridPreview() {
+        const container = document.getElementById('previewContainer');
+        let html = '<div class="row g-3">';
+        
+        exercises.slice(0, 12).forEach(ex => {
+            html += `
+                <div class="col-md-4">
+                    <div class="card preview-card">
+                        <div class="card-body">
+                            <h6 class="card-title">ID: ${ex.id}</h6>
+                            <p class="small mb-2"><strong>ES:</strong> ${ex.spanish}</p>
+                            <p class="small mb-2"><strong>EN:</strong> ${ex.english}</p>
+                            <div class="d-flex justify-content-between">
+                                <span class="badge bg-primary">${ex.category}</span>
+                                <span class="badge bg-${ex.difficulty === 'easy' ? 'success' : 
+                                                       ex.difficulty === 'intermediate' ? 'warning' : 'danger'}">
+                                    ${ex.difficulty}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        
+        html += '</div>';
+        container.innerHTML = html;
+    }
+    
+    function showListPreview() {
+        const container = document.getElementById('previewContainer');
+        let html = '<div class="list-group">';
+        
+        exercises.forEach(ex => {
+            html += `
+                <div class="list-group-item">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>${ex.spanish}</strong>
+                            <br>
+                            <small class="text-muted">${ex.english}</small>
+                        </div>
+                        <div>
+                            <span class="badge bg-primary">${ex.category}</span>
+                            <span class="badge bg-${ex.difficulty === 'easy' ? 'success' : 
+                                                   ex.difficulty === 'intermediate' ? 'warning' : 'danger'}">
+                                ${ex.difficulty}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        
+        html += '</div>';
+        container.innerHTML = html;
+    }
+    
+    function showJsonPreview() {
+        const container = document.getElementById('previewContainer');
+        container.innerHTML = `<pre class="bg-light p-3 rounded"><code>${JSON.stringify(exercises, null, 2)}</code></pre>`;
+    }
+    
+    function previewMode(mode) {
+        document.querySelectorAll('.btn-group .btn').forEach(btn => btn.classList.remove('active'));
+        event.target.classList.add('active');
+        updatePreview();
+    }
+    
+    function updateCategoriesList() {
+        const datalist = document.getElementById('categoryList');
+        const categories = ['educación', 'salud', 'tecnología', 'negocios', 'gobierno', 'social', 'cultura'];
+        
+        datalist.innerHTML = categories.map(c => `<option value="${c}">`).join('');
+    }
+    
+    function showComponents(id) {
+        const exercise = exercises.find(e => e.id === id);
+        if (exercise) {
+            showNotification(
+                `Componentes: ${exercise.components.join(' → ')}`,
+                'info'
+            );
+        }
+    }
+    
+    function editExercise(id) {
+        const exercise = exercises.find(e => e.id === id);
+        if (exercise) {
+            document.getElementById('exerciseId').value = exercise.id;
+            document.getElementById('spanishText').value = exercise.spanish;
+            document.getElementById('englishText').value = exercise.english;
+            document.getElementById('componentQuien').value = exercise.components[0];
+            document.getElementById('componentVerbo').value = exercise.components[1];
+            document.getElementById('componentAQuien').value = exercise.components[2];
+            document.getElementById('componentQue').value = exercise.components[3];
+            document.getElementById('category').value = exercise.category;
+            document.getElementById('difficulty').value = exercise.difficulty;
+            document.getElementById('hint').value = exercise.hint;
+            document.getElementById('tags').value = exercise.tags?.join(', ') || '';
+            
+            // Cambiar a la pestaña de creación individual
+            document.querySelector('[data-bs-target="#single"]').click();
+        }
+    }
+    
+    function deleteExercise(id) {
+        if (confirm('¿Está seguro de eliminar este ejercicio?')) {
+            exercises = exercises.filter(e => e.id !== id);
+            saveExercises();
+            showNotification('Ejercicio eliminado', 'warning');
+        }
+    }
+    
+    function clearAll() {
+        if (confirm('¿Está seguro de eliminar TODOS los ejercicios?')) {
+            exercises = [];
+            nextId = 1;
+            saveExercises();
+            showNotification('Todos los ejercicios han sido eliminados', 'warning');
+        }
+    }
+    
+    function saveToDatabase() {
+        fetch('/api/exercises/save', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(exercises)
+        })
+        .then(response => response.json())
+        .then(data => {
+            showNotification('Ejercicios guardados en la base de datos', 'success');
+        })
+        .catch(error => {
+            showNotification('Error al guardar: ' + error.message, 'danger');
+        });
+    }
+    
+    function exportJson() {
+        const dataStr = JSON.stringify(exercises, null, 2);
+        const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+        
+        const exportFileDefaultName = 'ejercicios.json';
+        
+        const linkElement = document.createElement('a');
+        linkElement.setAttribute('href', dataUri);
+        linkElement.setAttribute('download', exportFileDefaultName);
+        linkElement.click();
+    }
+    
+    function showNotification(message, type) {
+        const notification = document.createElement('div');
+        notification.className = `alert alert-${type} notification-popup`;
+        notification.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 
+                                                     type === 'danger' ? 'exclamation-circle' : 'info-circle'}"></i> ${message}`;
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            animation: slideIn 0.3s ease;
+        `;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
+    }
+</script>
+{% endblock %}

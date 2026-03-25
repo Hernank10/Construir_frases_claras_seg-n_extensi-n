@@ -1,0 +1,902 @@
+[
+    {
+        "id": 1,
+        "spanish": "El profesor explicó a los estudiantes los conceptos complejos de física cuántica",
+        "english": "The teacher explained to the students the complex concepts of quantum physics",
+        "components": ["El profesor", "explicó", "a los estudiantes", "los conceptos complejos de física cuántica"],
+        "category": "educación",
+        "difficulty": "intermediate",
+        "hint": "El complemento indirecto 'a los estudiantes' es más corto que el directo"
+    },
+    {
+        "id": 2,
+        "spanish": "La biblioteca prestó a los investigadores los manuscritos antiguos de la colección",
+        "english": "The library lent the researchers the ancient manuscripts from the collection",
+        "components": ["La biblioteca", "prestó", "a los investigadores", "los manuscritos antiguos de la colección"],
+        "category": "biblioteca",
+        "difficulty": "intermediate",
+        "hint": "Coloca 'a los investigadores' antes del objeto directo"
+    },
+    {
+        "id": 3,
+        "spanish": "El chef preparó para los comensales un menú degustación de siete tiempos",
+        "english": "The chef prepared for the diners a seven-course tasting menu",
+        "components": ["El chef", "preparó", "para los comensales", "un menú degustación de siete tiempos"],
+        "category": "restaurante",
+        "difficulty": "intermediate",
+        "hint": "'para los comensales' va antes por ser más corto"
+    },
+    {
+        "id": 4,
+        "spanish": "El gobierno entregó a los agricultores un paquete de subsidios para mejorar la producción",
+        "english": "The government gave farmers a subsidy package to improve production",
+        "components": ["El gobierno", "entregó", "a los agricultores", "un paquete de subsidios para mejorar la producción"],
+        "category": "gobierno",
+        "difficulty": "intermediate",
+        "hint": "Complemento indirecto corto va primero"
+    },
+    {
+        "id": 5,
+        "spanish": "La empresa envió a sus clientes un informe detallado sobre las nuevas políticas",
+        "english": "The company sent its clients a detailed report about the new policies",
+        "components": ["La empresa", "envió", "a sus clientes", "un informe detallado sobre las nuevas políticas"],
+        "category": "negocios",
+        "difficulty": "easy",
+        "hint": "'a sus clientes' es más corto que el objeto directo"
+    },
+    {
+        "id": 6,
+        "spanish": "El médico recetó a los pacientes un tratamiento innovador para la enfermedad",
+        "english": "The doctor prescribed patients an innovative treatment for the disease",
+        "components": ["El médico", "recetó", "a los pacientes", "un tratamiento innovador para la enfermedad"],
+        "category": "salud",
+        "difficulty": "intermediate",
+        "hint": "Colocar 'a los pacientes' antes del tratamiento"
+    },
+    {
+        "id": 7,
+        "spanish": "El arquitecto mostró a los inversionistas los planos del nuevo edificio sostenible",
+        "english": "The architect showed investors the plans for the new sustainable building",
+        "components": ["El arquitecto", "mostró", "a los inversionistas", "los planos del nuevo edificio sostenible"],
+        "category": "arquitectura",
+        "difficulty": "intermediate",
+        "hint": "Complemento indirecto primero por ser más corto"
+    },
+    {
+        "id": 8,
+        "spanish": "El banco ofreció a los emprendedores un préstamo con tasas preferenciales",
+        "english": "The bank offered entrepreneurs a loan with preferential rates",
+        "components": ["El banco", "ofreció", "a los emprendedores", "un préstamo con tasas preferenciales"],
+        "category": "finanzas",
+        "difficulty": "easy",
+        "hint": "Beneficiarios primero"
+    },
+    {
+        "id": 9,
+        "spanish": "La universidad asignó a los becarios mentores académicos expertos en investigación",
+        "english": "The university assigned scholarship recipients academic mentors expert in research",
+        "components": ["La universidad", "asignó", "a los becarios", "mentores académicos expertos en investigación"],
+        "category": "educación",
+        "difficulty": "intermediate",
+        "hint": "'a los becarios' es más corto"
+    },
+    {
+        "id": 10,
+        "spanish": "El artista regaló a sus fans una edición limitada de su último álbum",
+        "english": "The artist gave his fans a limited edition of his latest album",
+        "components": ["El artista", "regaló", "a sus fans", "una edición limitada de su último álbum"],
+        "category": "música",
+        "difficulty": "easy",
+        "hint": "Destinatarios primero"
+    },
+    {
+        "id": 11,
+        "spanish": "El científico presentó a la comunidad académica los resultados del estudio revolucionario",
+        "english": "The scientist presented to the academic community the results of the revolutionary study",
+        "components": ["El científico", "presentó", "a la comunidad académica", "los resultados del estudio revolucionario"],
+        "category": "ciencia",
+        "difficulty": "intermediate",
+        "hint": "Audiencia antes del contenido"
+    },
+    {
+        "id": 12,
+        "spanish": "La organización donó a las escuelas rurales material educativo digital moderno",
+        "english": "The organization donated to rural schools modern digital educational material",
+        "components": ["La organización", "donó", "a las escuelas rurales", "material educativo digital moderno"],
+        "category": "educación",
+        "difficulty": "easy",
+        "hint": "Beneficiarios primero"
+    },
+    {
+        "id": 13,
+        "spanish": "El escritor dedicó a sus lectores una novela inspirada en historias reales",
+        "english": "The writer dedicated to his readers a novel inspired by true stories",
+        "components": ["El escritor", "dedicó", "a sus lectores", "una novela inspirada en historias reales"],
+        "category": "literatura",
+        "difficulty": "easy",
+        "hint": "Lectores primero"
+    },
+    {
+        "id": 14,
+        "spanish": "El ingeniero explicó a los técnicos el procedimiento para calibrar los equipos",
+        "english": "The engineer explained to the technicians the procedure to calibrate the equipment",
+        "components": ["El ingeniero", "explicó", "a los técnicos", "el procedimiento para calibrar los equipos"],
+        "category": "tecnología",
+        "difficulty": "intermediate",
+        "hint": "Técnicos antes del procedimiento"
+    },
+    {
+        "id": 15,
+        "spanish": "La aerolínea ofreció a los pasajeros un sistema de entretenimiento a bordo avanzado",
+        "english": "The airline offered passengers an advanced onboard entertainment system",
+        "components": ["La aerolínea", "ofreció", "a los pasajeros", "un sistema de entretenimiento a bordo avanzado"],
+        "category": "viajes",
+        "difficulty": "easy",
+        "hint": "Pasajeros primero"
+    },
+    {
+        "id": 16,
+        "spanish": "El museo prestó a la universidad una colección de arte precolombino invaluable",
+        "english": "The museum lent the university an invaluable pre-Columbian art collection",
+        "components": ["El museo", "prestó", "a la universidad", "una colección de arte precolombino invaluable"],
+        "category": "cultura",
+        "difficulty": "intermediate",
+        "hint": "Universidad antes de la colección"
+    },
+    {
+        "id": 17,
+        "spanish": "El entrenador comunicó a los jugadores las nuevas tácticas para el próximo partido",
+        "english": "The coach communicated to the players the new tactics for the next game",
+        "components": ["El entrenador", "comunicó", "a los jugadores", "las nuevas tácticas para el próximo partido"],
+        "category": "deportes",
+        "difficulty": "easy",
+        "hint": "Jugadores primero"
+    },
+    {
+        "id": 18,
+        "spanish": "La tienda devolvió a los clientes el dinero de los productos defectuosos",
+        "english": "The store refunded customers the money for defective products",
+        "components": ["La tienda", "devolvió", "a los clientes", "el dinero de los productos defectuosos"],
+        "category": "comercio",
+        "difficulty": "easy",
+        "hint": "Clientes antes del dinero"
+    },
+    {
+        "id": 19,
+        "spanish": "El abogado explicó a su cliente los detalles legales del contrato comercial",
+        "english": "The lawyer explained to his client the legal details of the commercial contract",
+        "components": ["El abogado", "explicó", "a su cliente", "los detalles legales del contrato comercial"],
+        "category": "legal",
+        "difficulty": "intermediate",
+        "hint": "Cliente antes de los detalles"
+    },
+    {
+        "id": 20,
+        "spanish": "El periodista envió a la redacción un artículo sobre corrupción política",
+        "english": "The journalist sent to the editorial office an article about political corruption",
+        "components": ["El periodista", "envió", "a la redacción", "un artículo sobre corrupción política"],
+        "category": "periodismo",
+        "difficulty": "intermediate",
+        "hint": "Redacción antes del artículo"
+    },
+    {
+        "id": 21,
+        "spanish": "La empresa ofreció a los inversionistas un plan de expansión internacional ambicioso",
+        "english": "The company offered investors an ambitious international expansion plan",
+        "components": ["La empresa", "ofreció", "a los inversionistas", "un plan de expansión internacional ambicioso"],
+        "category": "negocios",
+        "difficulty": "intermediate",
+        "hint": "Inversionistas primero"
+    },
+    {
+        "id": 22,
+        "spanish": "El profesor mostró a la clase un experimento de química fascinante",
+        "english": "The teacher showed the class a fascinating chemistry experiment",
+        "components": ["El profesor", "mostró", "a la clase", "un experimento de química fascinante"],
+        "category": "educación",
+        "difficulty": "easy",
+        "hint": "Clase antes del experimento"
+    },
+    {
+        "id": 23,
+        "spanish": "El chef enseñó a los aprendices las técnicas culinarias tradicionales francesas",
+        "english": "The chef taught the apprentices the traditional French culinary techniques",
+        "components": ["El chef", "enseñó", "a los aprendices", "las técnicas culinarias tradicionales francesas"],
+        "category": "gastronomía",
+        "difficulty": "intermediate",
+        "hint": "Aprendices antes de las técnicas"
+    },
+    {
+        "id": 24,
+        "spanish": "La compañía garantizó a los consumidores la calidad de sus productos",
+        "english": "The company guaranteed consumers the quality of its products",
+        "components": ["La compañía", "garantizó", "a los consumidores", "la calidad de sus productos"],
+        "category": "comercio",
+        "difficulty": "easy",
+        "hint": "Consumidores primero"
+    },
+    {
+        "id": 25,
+        "spanish": "El director presentó al equipo los nuevos objetivos trimestrales de la empresa",
+        "english": "The director presented to the team the new quarterly objectives of the company",
+        "components": ["El director", "presentó", "al equipo", "los nuevos objetivos trimestrales de la empresa"],
+        "category": "empresa",
+        "difficulty": "intermediate",
+        "hint": "Equipo antes de los objetivos"
+    },
+    {
+        "id": 26,
+        "spanish": "La farmacia vendió a los pacientes medicamentos genéricos de alta calidad",
+        "english": "The pharmacy sold patients high-quality generic medications",
+        "components": ["La farmacia", "vendió", "a los pacientes", "medicamentos genéricos de alta calidad"],
+        "category": "salud",
+        "difficulty": "easy",
+        "hint": "Pacientes antes de los medicamentos"
+    },
+    {
+        "id": 27,
+        "spanish": "El guía mostró a los turistas los monumentos históricos de la ciudad colonial",
+        "english": "The guide showed tourists the historical monuments of the colonial city",
+        "components": ["El guía", "mostró", "a los turistas", "los monumentos históricos de la ciudad colonial"],
+        "category": "turismo",
+        "difficulty": "easy",
+        "hint": "Turistas antes de los monumentos"
+    },
+    {
+        "id": 28,
+        "spanish": "El músico dedicó a su público una canción inédita compuesta especialmente para la ocasión",
+        "english": "The musician dedicated to his audience an unreleased song composed especially for the occasion",
+        "components": ["El músico", "dedicó", "a su público", "una canción inédita compuesta especialmente para la ocasión"],
+        "category": "música",
+        "difficulty": "intermediate",
+        "hint": "Público antes de la canción"
+    },
+    {
+        "id": 29,
+        "spanish": "El juez explicó al jurado las instrucciones para deliberar sobre el caso",
+        "english": "The judge explained to the jury the instructions to deliberate on the case",
+        "components": ["El juez", "explicó", "al jurado", "las instrucciones para deliberar sobre el caso"],
+        "category": "legal",
+        "difficulty": "intermediate",
+        "hint": "Jurado antes de las instrucciones"
+    },
+    {
+        "id": 30,
+        "spanish": "La escuela proporcionó a los estudiantes materiales didácticos actualizados",
+        "english": "The school provided students with updated educational materials",
+        "components": ["La escuela", "proporcionó", "a los estudiantes", "materiales didácticos actualizados"],
+        "category": "educación",
+        "difficulty": "easy",
+        "hint": "Estudiantes primero"
+    },
+    {
+        "id": 31,
+        "spanish": "El alcalde prometió a los ciudadanos nuevas áreas verdes para la ciudad",
+        "english": "The mayor promised citizens new green areas for the city",
+        "components": ["El alcalde", "prometió", "a los ciudadanos", "nuevas áreas verdes para la ciudad"],
+        "category": "gobierno",
+        "difficulty": "easy",
+        "hint": "Ciudadanos antes de las áreas verdes"
+    },
+    {
+        "id": 32,
+        "spanish": "El sommelier recomendó a los comensales un vino tinto reserva especial",
+        "english": "The sommelier recommended to the diners a special reserve red wine",
+        "components": ["El sommelier", "recomendó", "a los comensales", "un vino tinto reserva especial"],
+        "category": "restaurante",
+        "difficulty": "intermediate",
+        "hint": "Comensales antes del vino"
+    },
+    {
+        "id": 33,
+        "spanish": "La empresa otorgó a los empleados un bono extraordinario por rendimiento",
+        "english": "The company granted employees an extraordinary bonus for performance",
+        "components": ["La empresa", "otorgó", "a los empleados", "un bono extraordinario por rendimiento"],
+        "category": "recursos humanos",
+        "difficulty": "easy",
+        "hint": "Empleados primero"
+    },
+    {
+        "id": 34,
+        "spanish": "El fotógrafo mostró a los asistentes las imágenes del conflicto armado",
+        "english": "The photographer showed attendees the images of the armed conflict",
+        "components": ["El fotógrafo", "mostró", "a los asistentes", "las imágenes del conflicto armado"],
+        "category": "arte",
+        "difficulty": "intermediate",
+        "hint": "Asistentes antes de las imágenes"
+    },
+    {
+        "id": 35,
+        "spanish": "La aseguradora ofreció a los afectados una compensación justa por los daños",
+        "english": "The insurance company offered affected parties fair compensation for the damages",
+        "components": ["La aseguradora", "ofreció", "a los afectados", "una compensación justa por los daños"],
+        "category": "seguros",
+        "difficulty": "intermediate",
+        "hint": "Afectados primero"
+    },
+    {
+        "id": 36,
+        "spanish": "El profesor asignó a los alumnos una investigación sobre cambio climático",
+        "english": "The teacher assigned students a research project on climate change",
+        "components": ["El profesor", "asignó", "a los alumnos", "una investigación sobre cambio climático"],
+        "category": "educación",
+        "difficulty": "easy",
+        "hint": "Alumnos antes de la investigación"
+    },
+    {
+        "id": 37,
+        "spanish": "La organización envió a los voluntarios kits de emergencia para la zona afectada",
+        "english": "The organization sent volunteers emergency kits for the affected area",
+        "components": ["La organización", "envió", "a los voluntarios", "kits de emergencia para la zona afectada"],
+        "category": "ONG",
+        "difficulty": "intermediate",
+        "hint": "Voluntarios primero"
+    },
+    {
+        "id": 38,
+        "spanish": "El chef sirvió a los invitados un plato exótico de la cocina tailandesa",
+        "english": "The chef served guests an exotic dish from Thai cuisine",
+        "components": ["El chef", "sirvió", "a los invitados", "un plato exótico de la cocina tailandesa"],
+        "category": "restaurante",
+        "difficulty": "easy",
+        "hint": "Invitados antes del plato"
+    },
+    {
+        "id": 39,
+        "spanish": "La universidad comunicó a los aspirantes los resultados del examen de admisión",
+        "english": "The university communicated to applicants the results of the admission exam",
+        "components": ["La universidad", "comunicó", "a los aspirantes", "los resultados del examen de admisión"],
+        "category": "educación",
+        "difficulty": "intermediate",
+        "hint": "Aspirantes antes de los resultados"
+    },
+    {
+        "id": 40,
+        "spanish": "El terapeuta recomendó a sus pacientes ejercicios de respiración para la ansiedad",
+        "english": "The therapist recommended to his patients breathing exercises for anxiety",
+        "components": ["El terapeuta", "recomendó", "a sus pacientes", "ejercicios de respiración para la ansiedad"],
+        "category": "salud",
+        "difficulty": "intermediate",
+        "hint": "Pacientes antes de los ejercicios"
+    },
+    {
+        "id": 41,
+        "spanish": "La compañía ofreció a los desarrolladores una API gratuita para integrar servicios",
+        "english": "The company offered developers a free API to integrate services",
+        "components": ["La compañía", "ofreció", "a los desarrolladores", "una API gratuita para integrar servicios"],
+        "category": "tecnología",
+        "difficulty": "intermediate",
+        "hint": "Desarrolladores primero"
+    },
+    {
+        "id": 42,
+        "spanish": "El director mostró a los actores el guion revisado para la nueva película",
+        "english": "The director showed the actors the revised script for the new movie",
+        "components": ["El director", "mostró", "a los actores", "el guion revisado para la nueva película"],
+        "category": "cine",
+        "difficulty": "intermediate",
+        "hint": "Actores antes del guion"
+    },
+    {
+        "id": 43,
+        "spanish": "La biblioteca ofreció a los usuarios un servicio de préstamo digital de libros",
+        "english": "The library offered users a digital book lending service",
+        "components": ["La biblioteca", "ofreció", "a los usuarios", "un servicio de préstamo digital de libros"],
+        "category": "biblioteca",
+        "difficulty": "easy",
+        "hint": "Usuarios primero"
+    },
+    {
+        "id": 44,
+        "spanish": "El entrenador explicó a los atletas las técnicas para mejorar su rendimiento",
+        "english": "The coach explained to the athletes the techniques to improve their performance",
+        "components": ["El entrenador", "explicó", "a los atletas", "las técnicas para mejorar su rendimiento"],
+        "category": "deportes",
+        "difficulty": "intermediate",
+        "hint": "Atletas antes de las técnicas"
+    },
+    {
+        "id": 45,
+        "spanish": "La empresa garantizó a los accionistas un retorno de inversión del 15% anual",
+        "english": "The company guaranteed shareholders a 15% annual return on investment",
+        "components": ["La empresa", "garantizó", "a los accionistas", "un retorno de inversión del 15% anual"],
+        "category": "finanzas",
+        "difficulty": "intermediate",
+        "hint": "Accionistas primero"
+    },
+    {
+        "id": 46,
+        "spanish": "El profesor recomendó a los estudiantes leer libros de literatura clásica",
+        "english": "The teacher recommended students read classic literature books",
+        "components": ["El profesor", "recomendó", "a los estudiantes", "leer libros de literatura clásica"],
+        "category": "educación",
+        "difficulty": "easy",
+        "hint": "Estudiantes antes de la recomendación"
+    },
+    {
+        "id": 47,
+        "spanish": "La tienda ofreció a los compradores descuentos especiales por el Black Friday",
+        "english": "The store offered shoppers special discounts for Black Friday",
+        "components": ["La tienda", "ofreció", "a los compradores", "descuentos especiales por el Black Friday"],
+        "category": "comercio",
+        "difficulty": "easy",
+        "hint": "Compradores primero"
+    },
+    {
+        "id": 48,
+        "spanish": "El arquitecto presentó a los clientes el diseño innovador para su nueva casa",
+        "english": "The architect presented to clients the innovative design for their new house",
+        "components": ["El arquitecto", "presentó", "a los clientes", "el diseño innovador para su nueva casa"],
+        "category": "arquitectura",
+        "difficulty": "intermediate",
+        "hint": "Clientes antes del diseño"
+    },
+    {
+        "id": 49,
+        "spanish": "La aerolínea informó a los pasajeros sobre la demora del vuelo por mal clima",
+        "english": "The airline informed passengers about the flight delay due to bad weather",
+        "components": ["La aerolínea", "informó", "a los pasajeros", "sobre la demora del vuelo por mal clima"],
+        "category": "viajes",
+        "difficulty": "intermediate",
+        "hint": "Pasajeros primero"
+    },
+    {
+        "id": 50,
+        "spanish": "El médico explicó a la familia el procedimiento quirúrgico necesario para el paciente",
+        "english": "The doctor explained to the family the surgical procedure necessary for the patient",
+        "components": ["El médico", "explicó", "a la familia", "el procedimiento quirúrgico necesario para el paciente"],
+        "category": "salud",
+        "difficulty": "intermediate",
+        "hint": "Familia antes del procedimiento"
+    },
+    {
+        "id": 51,
+        "spanish": "El artista mostró a los críticos su nueva colección de pinturas abstractas",
+        "english": "The artist showed critics his new collection of abstract paintings",
+        "components": ["El artista", "mostró", "a los críticos", "su nueva colección de pinturas abstractas"],
+        "category": "arte",
+        "difficulty": "intermediate",
+        "hint": "Críticos antes de las pinturas"
+    },
+    {
+        "id": 52,
+        "spanish": "La empresa comunicó a sus empleados los cambios en la política de vacaciones",
+        "english": "The company communicated to its employees the changes in the vacation policy",
+        "components": ["La empresa", "comunicó", "a sus empleados", "los cambios en la política de vacaciones"],
+        "category": "recursos humanos",
+        "difficulty": "intermediate",
+        "hint": "Empleados antes de los cambios"
+    },
+    {
+        "id": 53,
+        "spanish": "El chef enseñó a los estudiantes de cocina las técnicas básicas de la gastronomía molecular",
+        "english": "The chef taught cooking students the basic techniques of molecular gastronomy",
+        "components": ["El chef", "enseñó", "a los estudiantes de cocina", "las técnicas básicas de la gastronomía molecular"],
+        "category": "gastronomía",
+        "difficulty": "advanced",
+        "hint": "Estudiantes antes de las técnicas"
+    },
+    {
+        "id": 54,
+        "spanish": "La organización ofreció a las comunidades indígenas talleres de desarrollo sostenible",
+        "english": "The organization offered indigenous communities sustainable development workshops",
+        "components": ["La organización", "ofreció", "a las comunidades indígenas", "talleres de desarrollo sostenible"],
+        "category": "ONG",
+        "difficulty": "intermediate",
+        "hint": "Comunidades primero"
+    },
+    {
+        "id": 55,
+        "spanish": "El científico explicó a los periodistas los hallazgos del estudio sobre el cambio climático",
+        "english": "The scientist explained to journalists the findings of the study on climate change",
+        "components": ["El científico", "explicó", "a los periodistas", "los hallazgos del estudio sobre el cambio climático"],
+        "category": "ciencia",
+        "difficulty": "intermediate",
+        "hint": "Periodistas antes de los hallazgos"
+    },
+    {
+        "id": 56,
+        "spanish": "La escuela proporcionó a los padres de familia informes detallados del progreso académico",
+        "english": "The school provided parents with detailed reports of academic progress",
+        "components": ["La escuela", "proporcionó", "a los padres de familia", "informes detallados del progreso académico"],
+        "category": "educación",
+        "difficulty": "intermediate",
+        "hint": "Padres primero"
+    },
+    {
+        "id": 57,
+        "spanish": "El abogado entregó a su cliente los documentos legales para la demanda",
+        "english": "The lawyer delivered to his client the legal documents for the lawsuit",
+        "components": ["El abogado", "entregó", "a su cliente", "los documentos legales para la demanda"],
+        "category": "legal",
+        "difficulty": "intermediate",
+        "hint": "Cliente antes de los documentos"
+    },
+    {
+        "id": 58,
+        "spanish": "La agencia de viajes ofreció a los turistas paquetes todo incluido a Cancún",
+        "english": "The travel agency offered tourists all-inclusive packages to Cancun",
+        "components": ["La agencia de viajes", "ofreció", "a los turistas", "paquetes todo incluido a Cancún"],
+        "category": "turismo",
+        "difficulty": "easy",
+        "hint": "Turistas primero"
+    },
+    {
+        "id": 59,
+        "spanish": "El director de orquesta explicó a los músicos la interpretación de la sinfonía",
+        "english": "The orchestra conductor explained to the musicians the interpretation of the symphony",
+        "components": ["El director de orquesta", "explicó", "a los músicos", "la interpretación de la sinfonía"],
+        "category": "música",
+        "difficulty": "intermediate",
+        "hint": "Músicos antes de la interpretación"
+    },
+    {
+        "id": 60,
+        "spanish": "La empresa otorgó a sus mejores vendedores un viaje todo pagado a Europa",
+        "english": "The company granted its best salespeople an all-expenses-paid trip to Europe",
+        "components": ["La empresa", "otorgó", "a sus mejores vendedores", "un viaje todo pagado a Europa"],
+        "category": "negocios",
+        "difficulty": "intermediate",
+        "hint": "Vendedores primero"
+    },
+    {
+        "id": 61,
+        "spanish": "El farmacéutico recomendó a los clientes suplementos vitamínicos para fortalecer el sistema inmune",
+        "english": "The pharmacist recommended customers vitamin supplements to strengthen the immune system",
+        "components": ["El farmacéutico", "recomendó", "a los clientes", "suplementos vitamínicos para fortalecer el sistema inmune"],
+        "category": "salud",
+        "difficulty": "intermediate",
+        "hint": "Clientes antes de los suplementos"
+    },
+    {
+        "id": 62,
+        "spanish": "La universidad ofreció a los estudiantes de intercambio cursos intensivos de español",
+        "english": "The university offered exchange students intensive Spanish courses",
+        "components": ["La universidad", "ofreció", "a los estudiantes de intercambio", "cursos intensivos de español"],
+        "category": "educación",
+        "difficulty": "intermediate",
+        "hint": "Estudiantes primero"
+    },
+    {
+        "id": 63,
+        "spanish": "El chef preparó para los críticos gastronómicos un menú degustación exclusivo",
+        "english": "The chef prepared for the food critics an exclusive tasting menu",
+        "components": ["El chef", "preparó", "para los críticos gastronómicos", "un menú degustación exclusivo"],
+        "category": "gastronomía",
+        "difficulty": "intermediate",
+        "hint": "Críticos antes del menú"
+    },
+    {
+        "id": 64,
+        "spanish": "La compañía de seguros pagó a los afectados las indemnizaciones por el desastre natural",
+        "english": "The insurance company paid those affected the compensations for the natural disaster",
+        "components": ["La compañía de seguros", "pagó", "a los afectados", "las indemnizaciones por el desastre natural"],
+        "category": "seguros",
+        "difficulty": "intermediate",
+        "hint": "Afectados primero"
+    },
+    {
+        "id": 65,
+        "spanish": "El arquitecto explicó a los constructores los planos detallados del edificio",
+        "english": "The architect explained to the builders the detailed plans of the building",
+        "components": ["El arquitecto", "explicó", "a los constructores", "los planos detallados del edificio"],
+        "category": "arquitectura",
+        "difficulty": "intermediate",
+        "hint": "Constructores antes de los planos"
+    },
+    {
+        "id": 66,
+        "spanish": "La aerolínea ofreció a los pasajeros frecuentes millas bonus por sus viajes",
+        "english": "The airline offered frequent flyers bonus miles for their trips",
+        "components": ["La aerolínea", "ofreció", "a los pasajeros frecuentes", "millas bonus por sus viajes"],
+        "category": "viajes",
+        "difficulty": "easy",
+        "hint": "Pasajeros primero"
+    },
+    {
+        "id": 67,
+        "spanish": "El entrenador mostró a los jugadores las tácticas para el próximo partido importante",
+        "english": "The coach showed the players the tactics for the next important game",
+        "components": ["El entrenador", "mostró", "a los jugadores", "las tácticas para el próximo partido importante"],
+        "category": "deportes",
+        "difficulty": "intermediate",
+        "hint": "Jugadores antes de las tácticas"
+    },
+    {
+        "id": 68,
+        "spanish": "La organización humanitaria envió a los refugiados alimentos y medicinas de emergencia",
+        "english": "The humanitarian organization sent refugees food and emergency medicine",
+        "components": ["La organización humanitaria", "envió", "a los refugiados", "alimentos y medicinas de emergencia"],
+        "category": "ONG",
+        "difficulty": "intermediate",
+        "hint": "Refugiados primero"
+    },
+    {
+        "id": 69,
+        "spanish": "El profesor asignó a sus alumnos una tarea de investigación sobre la Revolución Mexicana",
+        "english": "The teacher assigned his students a research homework about the Mexican Revolution",
+        "components": ["El profesor", "asignó", "a sus alumnos", "una tarea de investigación sobre la Revolución Mexicana"],
+        "category": "educación",
+        "difficulty": "intermediate",
+        "hint": "Alumnos antes de la tarea"
+    },
+    {
+        "id": 70,
+        "spanish": "La empresa de tecnología ofreció a los programadores un curso gratuito de inteligencia artificial",
+        "english": "The technology company offered programmers a free artificial intelligence course",
+        "components": ["La empresa de tecnología", "ofreció", "a los programadores", "un curso gratuito de inteligencia artificial"],
+        "category": "tecnología",
+        "difficulty": "intermediate",
+        "hint": "Programadores primero"
+    },
+    {
+        "id": 71,
+        "spanish": "El banco otorgó a los jóvenes emprendedores un crédito con bajos intereses",
+        "english": "The bank granted young entrepreneurs a loan with low interest rates",
+        "components": ["El banco", "otorgó", "a los jóvenes emprendedores", "un crédito con bajos intereses"],
+        "category": "finanzas",
+        "difficulty": "easy",
+        "hint": "Emprendedores primero"
+    },
+    {
+        "id": 72,
+        "spanish": "La biblioteca digital ofreció a los investigadores acceso gratuito a bases de datos académicas",
+        "english": "The digital library offered researchers free access to academic databases",
+        "components": ["La biblioteca digital", "ofreció", "a los investigadores", "acceso gratuito a bases de datos académicas"],
+        "category": "biblioteca",
+        "difficulty": "intermediate",
+        "hint": "Investigadores primero"
+    },
+    {
+        "id": 73,
+        "spanish": "El médico recetó a la paciente medicamentos para controlar la presión arterial",
+        "english": "The doctor prescribed the patient medications to control blood pressure",
+        "components": ["El médico", "recetó", "a la paciente", "medicamentos para controlar la presión arterial"],
+        "category": "salud",
+        "difficulty": "easy",
+        "hint": "Paciente antes de los medicamentos"
+    },
+    {
+        "id": 74,
+        "spanish": "El director de cine explicó a los actores la visión artística de la película",
+        "english": "The film director explained to the actors the artistic vision of the movie",
+        "components": ["El director de cine", "explicó", "a los actores", "la visión artística de la película"],
+        "category": "cine",
+        "difficulty": "intermediate",
+        "hint": "Actores antes de la visión"
+    },
+    {
+        "id": 75,
+        "spanish": "La organización ecologista informó a la comunidad sobre los riesgos de la contaminación",
+        "english": "The environmental organization informed the community about the risks of pollution",
+        "components": ["La organización ecologista", "informó", "a la comunidad", "sobre los riesgos de la contaminación"],
+        "category": "medio ambiente",
+        "difficulty": "intermediate",
+        "hint": "Comunidad primero"
+    },
+    {
+        "id": 76,
+        "spanish": "El chef enseñó a los principiantes las técnicas básicas de cocina japonesa",
+        "english": "The chef taught beginners the basic techniques of Japanese cooking",
+        "components": ["El chef", "enseñó", "a los principiantes", "las técnicas básicas de cocina japonesa"],
+        "category": "gastronomía",
+        "difficulty": "intermediate",
+        "hint": "Principiantes antes de las técnicas"
+    },
+    {
+        "id": 77,
+        "spanish": "La empresa ofreció a sus empleados un programa de bienestar integral",
+        "english": "The company offered its employees a comprehensive wellness program",
+        "components": ["La empresa", "ofreció", "a sus empleados", "un programa de bienestar integral"],
+        "category": "recursos humanos",
+        "difficulty": "easy",
+        "hint": "Empleados primero"
+    },
+    {
+        "id": 78,
+        "spanish": "El escultor mostró a los visitantes las obras creadas con materiales reciclados",
+        "english": "The sculptor showed visitors the works created with recycled materials",
+        "components": ["El escultor", "mostró", "a los visitantes", "las obras creadas con materiales reciclados"],
+        "category": "arte",
+        "difficulty": "intermediate",
+        "hint": "Visitantes antes de las obras"
+    },
+    {
+        "id": 79,
+        "spanish": "La agencia gubernamental proporcionó a los damnificados asistencia humanitaria inmediata",
+        "english": "The government agency provided victims with immediate humanitarian assistance",
+        "components": ["La agencia gubernamental", "proporcionó", "a los damnificados", "asistencia humanitaria inmediata"],
+        "category": "gobierno",
+        "difficulty": "intermediate",
+        "hint": "Damnificados primero"
+    },
+    {
+        "id": 80,
+        "spanish": "El instructor de yoga enseñó a los alumnos posturas para aliviar el estrés",
+        "english": "The yoga instructor taught students postures to relieve stress",
+        "components": ["El instructor de yoga", "enseñó", "a los alumnos", "posturas para aliviar el estrés"],
+        "category": "salud",
+        "difficulty": "easy",
+        "hint": "Alumnos antes de las posturas"
+    },
+    {
+        "id": 81,
+        "spanish": "La cadena de hoteles ofreció a los huéspedes servicios de spa y relajación",
+        "english": "The hotel chain offered guests spa and relaxation services",
+        "components": ["La cadena de hoteles", "ofreció", "a los huéspedes", "servicios de spa y relajación"],
+        "category": "turismo",
+        "difficulty": "easy",
+        "hint": "Huéspedes primero"
+    },
+    {
+        "id": 82,
+        "spanish": "El experto en finanzas explicó a los inversionistas las tendencias del mercado",
+        "english": "The finance expert explained to investors the market trends",
+        "components": ["El experto en finanzas", "explicó", "a los inversionistas", "las tendencias del mercado"],
+        "category": "finanzas",
+        "difficulty": "intermediate",
+        "hint": "Inversionistas antes de las tendencias"
+    },
+    {
+        "id": 83,
+        "spanish": "La escuela de música ofreció a los estudiantes clases magistrales con músicos reconocidos",
+        "english": "The music school offered students master classes with renowned musicians",
+        "components": ["La escuela de música", "ofreció", "a los estudiantes", "clases magistrales con músicos reconocidos"],
+        "category": "música",
+        "difficulty": "intermediate",
+        "hint": "Estudiantes primero"
+    },
+    {
+        "id": 84,
+        "spanish": "El veterinario recomendó a los dueños de mascotas una dieta balanceada para sus animales",
+        "english": "The veterinarian recommended pet owners a balanced diet for their animals",
+        "components": ["El veterinario", "recomendó", "a los dueños de mascotas", "una dieta balanceada para sus animales"],
+        "category": "salud",
+        "difficulty": "intermediate",
+        "hint": "Dueños antes de la dieta"
+    },
+    {
+        "id": 85,
+        "spanish": "La empresa constructora presentó a los inversionistas el proyecto del nuevo complejo habitacional",
+        "english": "The construction company presented to investors the project of the new housing complex",
+        "components": ["La empresa constructora", "presentó", "a los inversionistas", "el proyecto del nuevo complejo habitacional"],
+        "category": "arquitectura",
+        "difficulty": "intermediate",
+        "hint": "Inversionistas antes del proyecto"
+    },
+    {
+        "id": 86,
+        "spanish": "El coreógrafo enseñó a los bailarines los pasos de la danza contemporánea",
+        "english": "The choreographer taught dancers the steps of contemporary dance",
+        "components": ["El coreógrafo", "enseñó", "a los bailarines", "los pasos de la danza contemporánea"],
+        "category": "arte",
+        "difficulty": "intermediate",
+        "hint": "Bailarines antes de los pasos"
+    },
+    {
+        "id": 87,
+        "spanish": "La plataforma educativa ofreció a los usuarios cursos gratuitos en línea certificados",
+        "english": "The educational platform offered users free certified online courses",
+        "components": ["La plataforma educativa", "ofreció", "a los usuarios", "cursos gratuitos en línea certificados"],
+        "category": "educación",
+        "difficulty": "easy",
+        "hint": "Usuarios primero"
+    },
+    {
+        "id": 88,
+        "spanish": "El nutricionista recomendó a sus pacientes una alimentación rica en vegetales",
+        "english": "The nutritionist recommended his patients a diet rich in vegetables",
+        "components": ["El nutricionista", "recomendó", "a sus pacientes", "una alimentación rica en vegetales"],
+        "category": "salud",
+        "difficulty": "easy",
+        "hint": "Pacientes antes de la alimentación"
+    },
+    {
+        "id": 89,
+        "spanish": "La empresa de software ofreció a los desarrolladores una plataforma de código abierto",
+        "english": "The software company offered developers an open source platform",
+        "components": ["La empresa de software", "ofreció", "a los desarrolladores", "una plataforma de código abierto"],
+        "category": "tecnología",
+        "difficulty": "intermediate",
+        "hint": "Desarrolladores primero"
+    },
+    {
+        "id": 90,
+        "spanish": "El comité organizador informó a los participantes sobre los cambios en el cronograma",
+        "english": "The organizing committee informed participants about the changes in the schedule",
+        "components": ["El comité organizador", "informó", "a los participantes", "sobre los cambios en el cronograma"],
+        "category": "eventos",
+        "difficulty": "intermediate",
+        "hint": "Participantes primero"
+    },
+    {
+        "id": 91,
+        "spanish": "La fundación entregó a las familias de escasos recursos becas educativas completas",
+        "english": "The foundation gave low-income families full educational scholarships",
+        "components": ["La fundación", "entregó", "a las familias de escasos recursos", "becas educativas completas"],
+        "category": "ONG",
+        "difficulty": "intermediate",
+        "hint": "Familias antes de las becas"
+    },
+    {
+        "id": 92,
+        "spanish": "El entrenador personal explicó a su cliente la rutina de ejercicios personalizada",
+        "english": "The personal trainer explained to his client the personalized exercise routine",
+        "components": ["El entrenador personal", "explicó", "a su cliente", "la rutina de ejercicios personalizada"],
+        "category": "salud",
+        "difficulty": "intermediate",
+        "hint": "Cliente antes de la rutina"
+    },
+    {
+        "id": 93,
+        "spanish": "La editorial ofreció a los autores un contrato de publicación ventajoso",
+        "english": "The publishing house offered authors a advantageous publishing contract",
+        "components": ["La editorial", "ofreció", "a los autores", "un contrato de publicación ventajoso"],
+        "category": "literatura",
+        "difficulty": "intermediate",
+        "hint": "Autores primero"
+    },
+    {
+        "id": 94,
+        "spanish": "El guía turístico mostró a los visitantes los lugares más emblemáticos de la ciudad",
+        "english": "The tour guide showed visitors the most emblematic places of the city",
+        "components": ["El guía turístico", "mostró", "a los visitantes", "los lugares más emblemáticos de la ciudad"],
+        "category": "turismo",
+        "difficulty": "easy",
+        "hint": "Visitantes antes de los lugares"
+    },
+    {
+        "id": 95,
+        "spanish": "La clínica ofreció a los pacientes tratamientos innovadores con tecnología de punta",
+        "english": "The clinic offered patients innovative treatments with cutting-edge technology",
+        "components": ["La clínica", "ofreció", "a los pacientes", "tratamientos innovadores con tecnología de punta"],
+        "category": "salud",
+        "difficulty": "intermediate",
+        "hint": "Pacientes primero"
+    },
+    {
+        "id": 96,
+        "spanish": "El profesor de historia explicó a los alumnos las causas de la independencia",
+        "english": "The history teacher explained to the students the causes of independence",
+        "components": ["El profesor de historia", "explicó", "a los alumnos", "las causas de la independencia"],
+        "category": "educación",
+        "difficulty": "intermediate",
+        "hint": "Alumnos antes de las causas"
+    },
+    {
+        "id": 97,
+        "spanish": "La empresa de logística ofreció a los clientes un servicio de entrega express",
+        "english": "The logistics company offered customers an express delivery service",
+        "components": ["La empresa de logística", "ofreció", "a los clientes", "un servicio de entrega express"],
+        "category": "comercio",
+        "difficulty": "easy",
+        "hint": "Clientes primero"
+    },
+    {
+        "id": 98,
+        "spanish": "El chef pastelero enseñó a los alumnos las técnicas para hacer postres franceses",
+        "english": "The pastry chef taught students the techniques for making French desserts",
+        "components": ["El chef pastelero", "enseñó", "a los alumnos", "las técnicas para hacer postres franceses"],
+        "category": "gastronomía",
+        "difficulty": "intermediate",
+        "hint": "Alumnos antes de las técnicas"
+    },
+    {
+        "id": 99,
+        "spanish": "La organización de derechos humanos informó a la prensa sobre las violaciones",
+        "english": "The human rights organization informed the press about the violations",
+        "components": ["La organización de derechos humanos", "informó", "a la prensa", "sobre las violaciones"],
+        "category": "derechos humanos",
+        "difficulty": "advanced",
+        "hint": "Prensa primero"
+    },
+    {
+        "id": 100,
+        "spanish": "El astrónomo mostró a los visitantes las estrellas a través del telescopio",
+        "english": "The astronomer showed visitors the stars through the telescope",
+        "components": ["El astrónomo", "mostró", "a los visitantes", "las estrellas a través del telescopio"],
+        "category": "ciencia",
+        "difficulty": "easy",
+        "hint": "Visitantes antes de las estrellas"
+    }
+]

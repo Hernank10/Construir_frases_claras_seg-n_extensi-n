@@ -1,0 +1,419 @@
+{% extends "base.html" %}
+
+{% block title %}Inicio - Escritor de Frases Claras{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="row mb-5">
+    <div class="col-lg-8 mx-auto text-center">
+        <div class="card shadow-lg border-0 overflow-hidden">
+            <div class="position-relative">
+                <!-- Imagen de fondo decorativa -->
+                <div style="background: linear-gradient(135deg, #4a6fa5 0%, #6b4e71 100%); height: 200px;"></div>
+                
+                <!-- Contenido superpuesto -->
+                <div class="position-relative" style="margin-top: -80px;">
+                    <div class="d-flex justify-content-center mb-3">
+                        <div class="bg-white rounded-circle p-3 shadow-lg">
+                            <i class="fas fa-feather-alt fa-4x" style="color: #ffb347;"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="card-body px-4 pt-3 pb-5">
+                        <h1 class="display-4 fw-bold" style="color: #2c3e50;">
+                            <span class="gradient-text">Escritor de Frases Claras</span>
+                        </h1>
+                        
+                        <p class="lead mb-4" style="color: #5a6b7a;">
+                            Aprende a construir frases efectivas siguiendo la regla de oro:
+                        </p>
+                        
+                        <div class="rule-box p-4 mb-4 mx-auto" style="max-width: 600px; background: #f8f9fa; border-radius: 15px;">
+                            <div class="d-flex justify-content-center align-items-center flex-wrap gap-3">
+                                <span class="badge" style="background: #4a6fa5; font-size: 1.2rem; padding: 0.8rem 1.5rem;">
+                                    <i class="fas fa-user"></i> QUIÉN
+                                </span>
+                                <i class="fas fa-plus-circle fa-2x" style="color: #6b4e71;"></i>
+                                <span class="badge" style="background: #6b4e71; font-size: 1.2rem; padding: 0.8rem 1.5rem;">
+                                    <i class="fas fa-running"></i> VERBO
+                                </span>
+                                <i class="fas fa-plus-circle fa-2x" style="color: #6b4e71;"></i>
+                                <span class="badge" style="background: #ffb347; font-size: 1.2rem; padding: 0.8rem 1.5rem;">
+                                    <i class="fas fa-user-friends"></i> A QUIÉN <small>(corto)</small>
+                                </span>
+                                <i class="fas fa-plus-circle fa-2x" style="color: #6b4e71;"></i>
+                                <span class="badge" style="background: #4caf50; font-size: 1.2rem; padding: 0.8rem 1.5rem;">
+                                    <i class="fas fa-book"></i> QUÉ <small>(largo)</small>
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <p class="mb-4 fs-5" style="color: #34495e;">
+                            <i class="fas fa-quote-left writing-icon"></i>
+                            El complemento indirecto <strong>(A QUIÉN)</strong> va primero cuando es más corto que el directo <strong>(QUÉ)</strong>
+                            <i class="fas fa-quote-right writing-icon"></i>
+                        </p>
+                        
+                        {% if not current_user.is_authenticated %}
+                        <div class="mt-4">
+                            <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg px-5 py-3 me-2">
+                                <i class="fas fa-user-plus"></i> Comenzar Gratis
+                            </a>
+                            <a href="{{ url_for('auth.login') }}" class="btn btn-outline-secondary btn-lg px-5 py-3">
+                                <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+                            </a>
+                        </div>
+                        {% else %}
+                        <div class="mt-4">
+                            <a href="{{ url_for('main.practice') }}" class="btn btn-primary btn-lg px-5 py-3 me-2">
+                                <i class="fas fa-pencil-alt"></i> Ir a Practicar
+                            </a>
+                            <a href="{{ url_for('main.dashboard') }}" class="btn btn-outline-secondary btn-lg px-5 py-3">
+                                <i class="fas fa-chart-line"></i> Mi Dashboard
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Estadísticas rápidas -->
+<div class="row mb-5">
+    <div class="col-12">
+        <div class="card shadow">
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-md-3 col-6 mb-3 mb-md-0">
+                        <div class="stat-card-mini">
+                            <i class="fas fa-pencil-alt fa-3x" style="color: #4a6fa5;"></i>
+                            <h3 class="mt-2 mb-0">100+</h3>
+                            <p class="text-muted">Ejercicios</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6 mb-3 mb-md-0">
+                        <div class="stat-card-mini">
+                            <i class="fas fa-layer-group fa-3x" style="color: #6b4e71;"></i>
+                            <h3 class="mt-2 mb-0">100</h3>
+                            <p class="text-muted">Flashcards</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="stat-card-mini">
+                            <i class="fas fa-clock fa-3x" style="color: #ffb347;"></i>
+                            <h3 class="mt-2 mb-0">24/7</h3>
+                            <p class="text-muted">Disponible</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="stat-card-mini">
+                            <i class="fas fa-smile fa-3x" style="color: #4caf50;"></i>
+                            <h3 class="mt-2 mb-0">100%</h3>
+                            <p class="text-muted">Gratuito</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Características principales -->
+<div class="row mb-5">
+    <div class="col-12 text-center mb-4">
+        <h2 class="fw-bold" style="color: #2c3e50;">
+            <i class="fas fa-star" style="color: #ffb347;"></i>
+            ¿Cómo funciona?
+            <i class="fas fa-star" style="color: #ffb347;"></i>
+        </h2>
+        <p class="lead">Tres formas simples de mejorar tu escritura</p>
+    </div>
+    
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 text-center feature-card">
+            <div class="card-body p-4">
+                <div class="feature-icon-wrapper mb-3">
+                    <i class="fas fa-sort-amount-down fa-4x" style="color: #4a6fa5;"></i>
+                </div>
+                <h4 class="fw-bold">Ordenar Componentes</h4>
+                <p class="text-muted">Arrastra y ordena las partes de la frase siguiendo la regla de extensión</p>
+                <ul class="list-unstyled text-start mt-3">
+                    <li><i class="fas fa-check text-success me-2"></i> Practica con 100+ ejercicios</li>
+                    <li><i class="fas fa-check text-success me-2"></i> Feedback inmediato</li>
+                    <li><i class="fas fa-check text-success me-2"></i> Pistas y explicaciones</li>
+                </ul>
+                {% if current_user.is_authenticated %}
+                <a href="{{ url_for('main.practice') }}" class="btn btn-outline-primary mt-3">
+                    Probar <i class="fas fa-arrow-right"></i>
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 text-center feature-card">
+            <div class="card-body p-4">
+                <div class="feature-icon-wrapper mb-3">
+                    <i class="fas fa-language fa-4x" style="color: #6b4e71;"></i>
+                </div>
+                <h4 class="fw-bold">Traducción Inglés</h4>
+                <p class="text-muted">Aprende la estructura equivalente en inglés con ejemplos prácticos</p>
+                <ul class="list-unstyled text-start mt-3">
+                    <li><i class="fas fa-check text-success me-2"></i> 100 frases traducidas</li>
+                    <li><i class="fas fa-check text-success me-2"></i> Comparación directa</li>
+                    <li><i class="fas fa-check text-success me-2"></i> Uso de "to" y "for"</li>
+                </ul>
+                {% if current_user.is_authenticated %}
+                <a href="{{ url_for('main.practice') }}?mode=translation" class="btn btn-outline-primary mt-3">
+                    Probar <i class="fas fa-arrow-right"></i>
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 text-center feature-card">
+            <div class="card-body p-4">
+                <div class="feature-icon-wrapper mb-3">
+                    <i class="fas fa-puzzle-piece fa-4x" style="color: #ffb347;"></i>
+                </div>
+                <h4 class="fw-bold">Práctica con Botones</h4>
+                <p class="text-muted">Interfaz interactiva con botones para construir frases paso a paso</p>
+                <ul class="list-unstyled text-start mt-3">
+                    <li><i class="fas fa-check text-success me-2"></i> Selección visual</li>
+                    <li><i class="fas fa-check text-success me-2"></i> Feedback táctil</li>
+                    <li><i class="fas fa-check text-success me-2"></i> Modo aprendizaje</li>
+                </ul>
+                {% if current_user.is_authenticated %}
+                <a href="{{ url_for('main.practice_buttons') }}" class="btn btn-outline-primary mt-3">
+                    Probar <i class="fas fa-arrow-right"></i>
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Ejemplos visuales -->
+<div class="row mb-5">
+    <div class="col-12">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="fas fa-eye"></i> Ejemplos en Acción</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="example-box p-3 mb-3" style="background: #e8f4fd; border-radius: 10px;">
+                            <h5 class="text-primary"><i class="fas fa-check-circle"></i> Correcto:</h5>
+                            <p class="fs-5">
+                                <span class="badge" style="background: #4a6fa5;">El profesor</span>
+                                <span class="badge" style="background: #6b4e71;">explicó</span>
+                                <span class="badge" style="background: #ffb347;">a los estudiantes</span>
+                                <span class="badge" style="background: #4caf50;">los conceptos complejos de física</span>
+                            </p>
+                            <p class="text-success">
+                                <i class="fas fa-lightbulb"></i> "a los estudiantes" (corto) va antes de "los conceptos complejos..." (largo)
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="example-box p-3 mb-3" style="background: #fee; border-radius: 10px;">
+                            <h5 class="text-danger"><i class="fas fa-times-circle"></i> Incorrecto:</h5>
+                            <p class="fs-5">
+                                <span class="badge" style="background: #4a6fa5;">El profesor</span>
+                                <span class="badge" style="background: #6b4e71;">explicó</span>
+                                <span class="badge" style="background: #dc3545;">los conceptos complejos de física</span>
+                                <span class="badge" style="background: #ffb347;">a los estudiantes</span>
+                            </p>
+                            <p class="text-danger">
+                                <i class="fas fa-exclamation-triangle"></i> El complemento largo va primero, dificultando la comprensión
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Sección de Testimonios -->
+<div class="row mb-5">
+    <div class="col-12 text-center mb-4">
+        <h2 class="fw-bold" style="color: #2c3e50;">Lo que dicen nuestros usuarios</h2>
+    </div>
+    
+    <div class="col-md-4 mb-3">
+        <div class="card h-100 testimonial-card">
+            <div class="card-body text-center">
+                <img src="https://ui-avatars.com/api/?name=Ana+Garcia&background=4a6fa5&color=fff&size=100" 
+                     class="rounded-circle mb-3" width="80" height="80">
+                <h5>Ana García</h5>
+                <p class="text-muted">Profesora de Español</p>
+                <div class="stars mb-2">
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                </div>
+                <p class="fst-italic">"Mis estudiantes han mejorado enormemente su claridad al escribir gracias a esta herramienta."</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-3">
+        <div class="card h-100 testimonial-card">
+            <div class="card-body text-center">
+                <img src="https://ui-avatars.com/api/?name=Carlos+Ruiz&background=6b4e71&color=fff&size=100" 
+                     class="rounded-circle mb-3" width="80" height="80">
+                <h5>Carlos Ruiz</h5>
+                <p class="text-muted">Escritor</p>
+                <div class="stars mb-2">
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                </div>
+                <p class="fst-italic">"La regla del complemento más corto primero ha transformado mi forma de escribir."</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-3">
+        <div class="card h-100 testimonial-card">
+            <div class="card-body text-center">
+                <img src="https://ui-avatars.com/api/?name=Laura+Mendez&background=ffb347&color=fff&size=100" 
+                     class="rounded-circle mb-3" width="80" height="80">
+                <h5>Laura Méndez</h5>
+                <p class="text-muted">Estudiante</p>
+                <div class="stars mb-2">
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                </div>
+                <p class="fst-italic">"Las flashcards son increíbles para aprender rápido. ¡Ya domino 50 frases!"</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Call to Action -->
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="card text-center" style="background: linear-gradient(135deg, #4a6fa5 0%, #6b4e71 100%);">
+            <div class="card-body p-5">
+                <h2 class="text-white mb-4">¿Listo para mejorar tu escritura?</h2>
+                <p class="text-white-50 mb-4">Comienza hoy mismo y domina el arte de construir frases claras</p>
+                {% if not current_user.is_authenticated %}
+                <a href="{{ url_for('auth.register') }}" class="btn btn-light btn-lg px-5">
+                    <i class="fas fa-rocket"></i> Crear Cuenta Gratis
+                </a>
+                {% else %}
+                <a href="{{ url_for('main.practice') }}" class="btn btn-light btn-lg px-5">
+                    <i class="fas fa-rocket"></i> Ir a Practicar Ahora
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .gradient-text {
+        background: linear-gradient(135deg, #4a6fa5 0%, #6b4e71 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        display: inline-block;
+    }
+    
+    .stat-card-mini {
+        padding: 1.5rem;
+        border-radius: 10px;
+        background: white;
+        transition: all 0.3s ease;
+    }
+    
+    .stat-card-mini:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+    
+    .feature-card {
+        transition: all 0.3s ease;
+        border: 1px solid transparent;
+    }
+    
+    .feature-card:hover {
+        border-color: #4a6fa5;
+        transform: translateY(-10px);
+    }
+    
+    .feature-icon-wrapper {
+        width: 100px;
+        height: 100px;
+        line-height: 100px;
+        margin: 0 auto;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+    }
+    
+    .testimonial-card {
+        border: none;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+    }
+    
+    .testimonial-card:hover {
+        transform: scale(1.02);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+    
+    .example-box {
+        transition: all 0.3s ease;
+    }
+    
+    .example-box:hover {
+        transform: translateX(5px);
+    }
+    
+    .badge {
+        font-size: 1rem;
+        padding: 0.5rem 1rem;
+        margin: 0.2rem;
+        transition: all 0.3s ease;
+    }
+    
+    .badge:hover {
+        transform: scale(1.05);
+    }
+    
+    .rule-box {
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .rule-box::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.3) 50%, transparent 70%);
+        animation: shine 3s infinite;
+    }
+    
+    @keyframes shine {
+        0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+        100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+    }
+</style>
+{% endblock %}

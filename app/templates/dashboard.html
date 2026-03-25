@@ -1,0 +1,500 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - {{ current_user.username }}{% endblock %}
+
+{% block content %}
+<!-- Encabezado del Dashboard -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card shadow border-0 bg-gradient-primary text-white">
+            <div class="card-body p-4">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h2 class="display-5 fw-bold mb-3">
+                            <i class="fas fa-chart-line me-2"></i> 
+                            ¡Bienvenido de vuelta, {{ current_user.username }}!
+                        </h2>
+                        <p class="lead mb-0 opacity-90">
+                            <i class="fas fa-calendar-alt me-2"></i>
+                            {{ now.strftime('%d de %B, %Y') }}
+                        </p>
+                    </div>
+                    <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                        <div class="d-inline-block bg-white bg-opacity-25 rounded-3 p-3">
+                            <i class="fas fa-trophy fa-3x mb-2"></i>
+                            <h3 class="mb-0">Nivel {{ user_level }}</h3>
+                            <small>{{ user_xp }} / {{ next_level_xp }} XP</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tarjetas de Estadísticas Rápidas -->
+<div class="row mb-4">
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card stat-card h-100 border-start border-primary border-4">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-3 text-center">
+                        <i class="fas fa-pencil-alt fa-3x text-primary"></i>
+                    </div>
+                    <div class="col-9">
+                        <h6 class="text-muted mb-1">Prácticas Realizadas</h6>
+                        <h3 class="mb-0 fw-bold">{{ total_practices }}</h3>
+                        <small class="text-success">
+                            <i class="fas fa-arrow-up"></i> +{{ practices_today }} hoy
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card stat-card h-100 border-start border-success border-4">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-3 text-center">
+                        <i class="fas fa-check-circle fa-3x text-success"></i>
+                    </div>
+                    <div class="col-9">
+                        <h6 class="text-muted mb-1">Respuestas Correctas</h6>
+                        <h3 class="mb-0 fw-bold">{{ correct_answers }}</h3>
+                        <small class="text-info">
+                            <i class="fas fa-chart-pie"></i> {{ accuracy }}% precisión
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card stat-card h-100 border-start border-warning border-4">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-3 text-center">
+                        <i class="fas fa-layer-group fa-3x text-warning"></i>
+                    </div>
+                    <div class="col-9">
+                        <h6 class="text-muted mb-1">Flashcards Estudiadas</h6>
+                        <h3 class="mb-0 fw-bold">{{ flashcards_studied }}</h3>
+                        <small class="text-warning">
+                            <i class="fas fa-fire"></i> Racha: {{ streak }} días
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card stat-card h-100 border-start border-info border-4">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-3 text-center">
+                        <i class="fas fa-clock fa-3x text-info"></i>
+                    </div>
+                    <div class="col-9">
+                        <h6 class="text-muted mb-1">Tiempo de Estudio</h6>
+                        <h3 class="mb-0 fw-bold">{{ total_hours }}h</h3>
+                        <small class="text-secondary">
+                            <i class="fas fa-hourglass-half"></i> {{ avg_session }} min/sesión
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Gráficos y Progreso -->
+<div class="row mb-4">
+    <div class="col-lg-8 mb-4">
+        <div class="card h-100 shadow">
+            <div class="card-header bg-white border-0">
+                <h5 class="mb-0 fw-bold">
+                    <i class="fas fa-chart-line text-primary me-2"></i>
+                    Progreso Semanal
+                </h5>
+            </div>
+            <div class="card-body">
+                <canvas id="weeklyProgressChart" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4 mb-4">
+        <div class="card h-100 shadow">
+            <div class="card-header bg-white border-0">
+                <h5 class="mb-0 fw-bold">
+                    <i class="fas fa-chart-pie text-success me-2"></i>
+                    Rendimiento por Tipo
+                </h5>
+            </div>
+            <div class="card-body">
+                <canvas id="performanceChart" height="200"></canvas>
+                <div class="mt-3 text-center">
+                    <div class="row">
+                        <div class="col-6">
+                            <span class="badge bg-primary p-2 w-100">
+                                Orden: {{ order_accuracy }}%
+                            </span>
+                        </div>
+                        <div class="col-6">
+                            <span class="badge bg-success p-2 w-100">
+                                Traducción: {{ translation_accuracy }}%
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Actividad Reciente y Próximas Flashcards -->
+<div class="row mb-4">
+    <div class="col-lg-6 mb-4">
+        <div class="card h-100 shadow">
+            <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center">
+                <h5 class="mb-0 fw-bold">
+                    <i class="fas fa-history text-info me-2"></i>
+                    Actividad Reciente
+                </h5>
+                <a href="{{ url_for('main.history') }}" class="btn btn-sm btn-outline-primary">
+                    Ver Todo <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            <div class="card-body">
+                {% if recent_activities %}
+                <div class="timeline">
+                    {% for activity in recent_activities %}
+                    <div class="timeline-item mb-3">
+                        <div class="row">
+                            <div class="col-2 text-center">
+                                <div class="timeline-icon 
+                                    {% if activity.is_correct %}bg-success{% else %}bg-danger{% endif %} 
+                                    text-white rounded-circle d-inline-flex align-items-center justify-content-center" 
+                                    style="width: 40px; height: 40px;">
+                                    <i class="fas fa-{% if activity.is_correct %}check{% else %}times{% endif %}"></i>
+                                </div>
+                            </div>
+                            <div class="col-10">
+                                <p class="mb-1">
+                                    <strong>{{ activity.practice_type|capitalize }}</strong>
+                                    <small class="text-muted ms-2">{{ activity.created_at.strftime('%H:%M') }}</small>
+                                </p>
+                                <p class="small text-muted mb-0">{{ activity.sentence_preview }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-center py-4">
+                    <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                    <p class="text-muted">No hay actividad reciente. ¡Comienza a practicar!</p>
+                    <a href="{{ url_for('main.practice') }}" class="btn btn-primary">
+                        <i class="fas fa-pencil-alt"></i> Practicar Ahora
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-6 mb-4">
+        <div class="card h-100 shadow">
+            <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center">
+                <h5 class="mb-0 fw-bold">
+                    <i class="fas fa-layer-group text-warning me-2"></i>
+                    Próximas Flashcards
+                </h5>
+                <a href="{{ url_for('main.flashcards') }}" class="btn btn-sm btn-outline-primary">
+                    Estudiar <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            <div class="card-body">
+                {% if upcoming_flashcards %}
+                <div class="list-group list-group-flush">
+                    {% for card in upcoming_flashcards %}
+                    <div class="list-group-item d-flex align-items-center px-0">
+                        <div class="flex-shrink-0">
+                            <span class="badge bg-{{ card.difficulty_color }} rounded-pill p-2">
+                                <i class="fas fa-{% if card.difficulty == 'easy' %}smile{% elif card.difficulty == 'intermediate' %}meh{% else %}frown{% endif %}"></i>
+                            </span>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h6 class="mb-1">{{ card.front }}</h6>
+                            <small class="text-muted">Revisión: {{ card.next_review }}</small>
+                        </div>
+                        <div class="flex-shrink-0">
+                            <span class="badge bg-info">{{ card.success_rate }}%</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-center py-4">
+                    <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
+                    <p class="text-muted">¡Has completado todas las flashcards por ahora!</p>
+                    <a href="{{ url_for('main.flashcards') }}" class="btn btn-warning">
+                        <i class="fas fa-random"></i> Repasar Aleatorias
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Logros y Metas -->
+<div class="row mb-4">
+    <div class="col-lg-6 mb-4">
+        <div class="card h-100 shadow">
+            <div class="card-header bg-white border-0">
+                <h5 class="mb-0 fw-bold">
+                    <i class="fas fa-trophy text-warning me-2"></i>
+                    Logros Recientes
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    {% for achievement in achievements %}
+                    <div class="col-md-6 mb-3">
+                        <div class="achievement-card p-3 {% if achievement.earned %}bg-light{% else %}bg-light opacity-50{% endif %} rounded-3">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-{{ achievement.icon }} fa-2x text-{{ achievement.color }}"></i>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-1">{{ achievement.name }}</h6>
+                                    <div class="progress" style="height: 5px;">
+                                        <div class="progress-bar bg-{{ achievement.color }}" 
+                                             style="width: {{ achievement.progress }}%"></div>
+                                    </div>
+                                    <small class="text-muted">{{ achievement.progress }}/{{ achievement.total }}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-6 mb-4">
+        <div class="card h-100 shadow">
+            <div class="card-header bg-white border-0">
+                <h5 class="mb-0 fw-bold">
+                    <i class="fas fa-bullseye text-danger me-2"></i>
+                    Metas Diarias
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span>Prácticas de hoy ({{ today_practices }}/{{ daily_goal_practices }})</span>
+                        <span class="fw-bold">{{ (today_practices / daily_goal_practices * 100)|int }}%</span>
+                    </div>
+                    <div class="progress" style="height: 10px;">
+                        <div class="progress-bar bg-success" 
+                             style="width: {{ (today_practices / daily_goal_practices * 100)|int }}%"></div>
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span>Flashcards hoy ({{ today_flashcards }}/{{ daily_goal_flashcards }})</span>
+                        <span class="fw-bold">{{ (today_flashcards / daily_goal_flashcards * 100)|int }}%</span>
+                    </div>
+                    <div class="progress" style="height: 10px;">
+                        <div class="progress-bar bg-info" 
+                             style="width: {{ (today_flashcards / daily_goal_flashcards * 100)|int }}%"></div>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span>Tiempo de estudio ({{ today_minutes }}min/{{ daily_goal_minutes }}min)</span>
+                        <span class="fw-bold">{{ (today_minutes / daily_goal_minutes * 100)|int }}%</span>
+                    </div>
+                    <div class="progress" style="height: 10px;">
+                        <div class="progress-bar bg-warning" 
+                             style="width: {{ (today_minutes / daily_goal_minutes * 100)|int }}%"></div>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-4">
+                    <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#goalsModal">
+                        <i class="fas fa-edit"></i> Ajustar Metas
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para ajustar metas -->
+<div class="modal fade" id="goalsModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Ajustar Metas Diarias</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="goalsForm">
+                    <div class="mb-3">
+                        <label class="form-label">Prácticas por día</label>
+                        <input type="number" class="form-control" value="{{ daily_goal_practices }}" min="1" max="50">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Flashcards por día</label>
+                        <input type="number" class="form-control" value="{{ daily_goal_flashcards }}" min="1" max="100">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Minutos de estudio por día</label>
+                        <input type="number" class="form-control" value="{{ daily_goal_minutes }}" min="5" max="180">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="saveGoals()">Guardar Cambios</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #4a6fa5 0%, #6b4e71 100%);
+    }
+    
+    .stat-card {
+        transition: all 0.3s ease;
+        border-left-width: 4px !important;
+    }
+    
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+    
+    .timeline-item:last-child .mb-3 {
+        margin-bottom: 0 !important;
+    }
+    
+    .timeline-icon {
+        box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+    
+    .achievement-card {
+        transition: all 0.3s ease;
+        border: 1px solid transparent;
+    }
+    
+    .achievement-card:hover {
+        border-color: #4a6fa5;
+        transform: translateX(5px);
+    }
+    
+    .progress {
+        background-color: #e9ecef;
+        border-radius: 10px;
+    }
+    
+    .list-group-item {
+        border-left: none;
+        border-right: none;
+        transition: all 0.3s ease;
+    }
+    
+    .list-group-item:hover {
+        background-color: #f8f9fa;
+    }
+    
+    .badge {
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+    }
+</style>
+
+<script>
+    // Gráfico de progreso semanal
+    const weeklyCtx = document.getElementById('weeklyProgressChart').getContext('2d');
+    new Chart(weeklyCtx, {
+        type: 'line',
+        data: {
+            labels: {{ weekly_labels | tojson }},
+            datasets: [{
+                label: 'Prácticas',
+                data: {{ weekly_data | tojson }},
+                borderColor: '#4a6fa5',
+                backgroundColor: 'rgba(74, 111, 165, 0.1)',
+                tension: 0.4,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        display: true,
+                        color: 'rgba(0,0,0,0.05)'
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
+                    }
+                }
+            }
+        }
+    });
+    
+    // Gráfico de rendimiento por tipo
+    const perfCtx = document.getElementById('performanceChart').getContext('2d');
+    new Chart(perfCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Orden', 'Traducción', 'Flashcards'],
+            datasets: [{
+                data: [{{ order_count }}, {{ translation_count }}, {{ flashcard_count }}],
+                backgroundColor: ['#4a6fa5', '#6b4e71', '#ffb347'],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            cutout: '70%'
+        }
+    });
+    
+    function saveGoals() {
+        // Aquí iría la lógica para guardar las metas
+        alert('Metas actualizadas correctamente');
+        bootstrap.Modal.getInstance(document.getElementById('goalsModal')).hide();
+    }
+</script>
+{% endblock %}

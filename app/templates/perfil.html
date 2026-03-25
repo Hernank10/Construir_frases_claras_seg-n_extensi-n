@@ -1,0 +1,874 @@
+{% extends "base.html" %}
+
+{% block title %}Mi Perfil - {{ current_user.username }}{% endblock %}
+
+{% block content %}
+<!-- Encabezado del perfil -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card bg-gradient-profile text-white border-0 shadow">
+            <div class="card-body p-4">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h2 class="display-5 fw-bold mb-3">
+                            <i class="fas fa-user-circle me-2"></i> 
+                            Mi Perfil
+                        </h2>
+                        <p class="lead mb-0 opacity-90">
+                            <i class="fas fa-id-card me-2"></i>
+                            Gestiona tu información personal y preferencias
+                        </p>
+                    </div>
+                    <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                        <div class="d-inline-block bg-white bg-opacity-25 rounded-3 p-3">
+                            <i class="fas fa-calendar-alt fa-2x mb-2"></i>
+                            <h5 class="mb-0">Miembro desde</h5>
+                            <small>{{ current_user.created_at.strftime('%d/%m/%Y') if current_user.created_at else 'Hoy' }}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Columna izquierda - Foto y datos básicos -->
+    <div class="col-lg-4 mb-4">
+        <div class="card shadow border-0">
+            <div class="card-body text-center p-4">
+                <!-- Avatar con opción de cambio -->
+                <div class="position-relative d-inline-block mb-3">
+                    <div class="avatar-circle bg-gradient-primary" id="avatarPreview">
+                        <span class="avatar-initials">{{ current_user.username[0]|upper }}</span>
+                    </div>
+                    <button class="btn btn-sm btn-primary position-absolute bottom-0 end-0 rounded-circle" 
+                            onclick="document.getElementById('avatarInput').click()" 
+                            style="width: 32px; height: 32px; padding: 0;">
+                        <i class="fas fa-camera"></i>
+                    </button>
+                    <input type="file" id="avatarInput" accept="image/*" style="display: none;" onchange="previewAvatar(this)">
+                </div>
+                
+                <h3 class="fw-bold">{{ current_user.username }}</h3>
+                <p class="text-muted mb-2">
+                    <i class="fas fa-envelope me-2"></i>{{ current_user.email }}
+                </p>
+                <p class="text-muted mb-3">
+                    <i class="fas fa-map-marker-alt me-2"></i>
+                    <span id="userLocation">{{ current_user.location or 'No especificado' }}</span>
+                </p>
+                
+                <!-- Nivel y experiencia -->
+                <div class="bg-light rounded-3 p-3 mb-3">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="fw-bold">Nivel {{ user_level or 1 }}</span>
+                        <span class="text-muted">{{ user_xp or 0 }}/{{ next_level_xp or 1000 }} XP</span>
+                    </div>
+                    <div class="progress" style="height: 8px;">
+                        <div class="progress-bar bg-success" style="width: {{ xp_percentage or 0 }}%"></div>
+                    </div>
+                </div>
+                
+                <!-- Estadísticas rápidas -->
+                <div class="row g-2 mb-3">
+                    <div class="col-4">
+                        <div class="stat-mini">
+                            <span class="d-block fw-bold fs-5">{{ total_practices or 0 }}</span>
+                            <small class="text-muted">Prácticas</small>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="stat-mini">
+                            <span class="d-block fw-bold fs-5">{{ achievements_count or 0 }}</span>
+                            <small class="text-muted">Logros</small>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="stat-mini">
+                            <span class="d-block fw-bold fs-5">{{ streak_days or 0 }}</span>
+                            <small class="text-muted">Racha</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Botones de acción -->
+                <div class="d-grid gap-2">
+                    <button class="btn btn-outline-primary" onclick="showEditProfileModal()">
+                        <i class="fas fa-edit"></i> Editar Perfil
+                    </button>
+                    <button class="btn btn-outline-success" onclick="showChangePasswordModal()">
+                        <i class="fas fa-key"></i> Cambiar Contraseña
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tarjeta de preferencias de idioma -->
+        <div class="card shadow border-0 mt-4">
+            <div class="card-header bg-white">
+                <h6 class="mb-0 fw-bold"><i class="fas fa-language text-primary me-2"></i>Preferencias de Idioma</h6>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label class="form-label">Idioma de la interfaz</label>
+                    <select class="form-select" id="uiLanguage" onchange="updateLanguagePreference()">
+                        <option value="es" {% if current_user.ui_language == 'es' %}selected{% endif %}>Español</option>
+                        <option value="en" {% if current_user.ui_language == 'en' %}selected{% endif %}>English</option>
+                        <option value="pt" {% if current_user.ui_language == 'pt' %}selected{% endif %}>Português</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Idioma de práctica</label>
+                    <select class="form-select" id="practiceLanguage" onchange="updateLanguagePreference()">
+                        <option value="es-en" {% if current_user.practice_language == 'es-en' %}selected{% endif %}>Español → Inglés</option>
+                        <option value="en-es" {% if current_user.practice_language == 'en-es' %}selected{% endif %}>Inglés → Español</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Columna derecha - Información detallada -->
+    <div class="col-lg-8">
+        <!-- Pestañas de información -->
+        <div class="card shadow border-0">
+            <div class="card-header bg-white">
+                <ul class="nav nav-tabs card-header-tabs" id="profileTabs" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="info-tab" data-bs-toggle="tab" href="#info">
+                            <i class="fas fa-info-circle"></i> Información Personal
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="stats-tab" data-bs-toggle="tab" href="#stats">
+                            <i class="fas fa-chart-line"></i> Estadísticas
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="achievements-tab" data-bs-toggle="tab" href="#achievements">
+                            <i class="fas fa-trophy"></i> Logros
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="security-tab" data-bs-toggle="tab" href="#security">
+                            <i class="fas fa-shield-alt"></i> Seguridad
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="card-body">
+                <div class="tab-content">
+                    <!-- Pestaña: Información Personal -->
+                    <div class="tab-pane fade show active" id="info">
+                        <form id="profileForm">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">
+                                        <i class="fas fa-user text-primary"></i> Nombre completo
+                                    </label>
+                                    <input type="text" class="form-control" id="fullName" 
+                                           value="{{ current_user.full_name or '' }}" 
+                                           placeholder="Tu nombre completo">
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">
+                                        <i class="fas fa-at text-success"></i> Nombre de usuario
+                                    </label>
+                                    <input type="text" class="form-control" id="username" 
+                                           value="{{ current_user.username }}" readonly>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">
+                                        <i class="fas fa-envelope text-info"></i> Correo electrónico
+                                    </label>
+                                    <input type="email" class="form-control" id="email" 
+                                           value="{{ current_user.email }}" readonly>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">
+                                        <i class="fas fa-phone text-warning"></i> Teléfono
+                                    </label>
+                                    <input type="tel" class="form-control" id="phone" 
+                                           value="{{ current_user.phone or '' }}" 
+                                           placeholder="Tu número de teléfono">
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">
+                                        <i class="fas fa-calendar text-danger"></i> Fecha de nacimiento
+                                    </label>
+                                    <input type="date" class="form-control" id="birthDate" 
+                                           value="{{ current_user.birth_date or '' }}">
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">
+                                        <i class="fas fa-flag text-secondary"></i> País
+                                    </label>
+                                    <select class="form-select" id="country">
+                                        <option value="">Selecciona tu país</option>
+                                        <option value="AR" {% if current_user.country == 'AR' %}selected{% endif %}>Argentina</option>
+                                        <option value="BO" {% if current_user.country == 'BO' %}selected{% endif %}>Bolivia</option>
+                                        <option value="CL" {% if current_user.country == 'CL' %}selected{% endif %}>Chile</option>
+                                        <option value="CO" {% if current_user.country == 'CO' %}selected{% endif %}>Colombia</option>
+                                        <option value="CR" {% if current_user.country == 'CR' %}selected{% endif %}>Costa Rica</option>
+                                        <option value="CU" {% if current_user.country == 'CU' %}selected{% endif %}>Cuba</option>
+                                        <option value="DO" {% if current_user.country == 'DO' %}selected{% endif %}>República Dominicana</option>
+                                        <option value="EC" {% if current_user.country == 'EC' %}selected{% endif %}>Ecuador</option>
+                                        <option value="ES" {% if current_user.country == 'ES' %}selected{% endif %}>España</option>
+                                        <option value="GT" {% if current_user.country == 'GT' %}selected{% endif %}>Guatemala</option>
+                                        <option value="HN" {% if current_user.country == 'HN' %}selected{% endif %}>Honduras</option>
+                                        <option value="MX" {% if current_user.country == 'MX' %}selected{% endif %}>México</option>
+                                        <option value="NI" {% if current_user.country == 'NI' %}selected{% endif %}>Nicaragua</option>
+                                        <option value="PA" {% if current_user.country == 'PA' %}selected{% endif %}>Panamá</option>
+                                        <option value="PE" {% if current_user.country == 'PE' %}selected{% endif %}>Perú</option>
+                                        <option value="PR" {% if current_user.country == 'PR' %}selected{% endif %}>Puerto Rico</option>
+                                        <option value="PY" {% if current_user.country == 'PY' %}selected{% endif %}>Paraguay</option>
+                                        <option value="SV" {% if current_user.country == 'SV' %}selected{% endif %}>El Salvador</option>
+                                        <option value="US" {% if current_user.country == 'US' %}selected{% endif %}>Estados Unidos</option>
+                                        <option value="UY" {% if current_user.country == 'UY' %}selected{% endif %}>Uruguay</option>
+                                        <option value="VE" {% if current_user.country == 'VE' %}selected{% endif %}>Venezuela</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="col-12">
+                                    <label class="form-label fw-bold">
+                                        <i class="fas fa-map-pin text-primary"></i> Dirección
+                                    </label>
+                                    <input type="text" class="form-control" id="address" 
+                                           value="{{ current_user.address or '' }}" 
+                                           placeholder="Tu dirección">
+                                </div>
+                                
+                                <div class="col-12">
+                                    <label class="form-label fw-bold">
+                                        <i class="fas fa-info-circle text-info"></i> Biografía
+                                    </label>
+                                    <textarea class="form-control" id="bio" rows="4" 
+                                              placeholder="Cuéntanos sobre ti...">{{ current_user.bio or '' }}</textarea>
+                                </div>
+                                
+                                <div class="col-12">
+                                    <label class="form-label fw-bold">
+                                        <i class="fas fa-link text-success"></i> Sitio web / Redes sociales
+                                    </label>
+                                    <input type="url" class="form-control" id="website" 
+                                           value="{{ current_user.website or '' }}" 
+                                           placeholder="https://tusitio.com">
+                                </div>
+                                
+                                <div class="col-12 text-center mt-3">
+                                    <button type="button" class="btn btn-primary px-5" onclick="saveProfile()">
+                                        <i class="fas fa-save"></i> Guardar Cambios
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <!-- Pestaña: Estadísticas -->
+                    <div class="tab-pane fade" id="stats">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="card stat-card h-100">
+                                    <div class="card-body">
+                                        <canvas id="practiceChart" height="200"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card stat-card h-100">
+                                    <div class="card-body">
+                                        <canvas id="accuracyChart" height="200"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h6 class="fw-bold mb-3">Estadísticas detalladas</h6>
+                                        <div class="table-responsive">
+                                            <table class="table table-sm">
+                                                <tr>
+                                                    <th>Total de prácticas:</th>
+                                                    <td>{{ total_practices or 0 }}</td>
+                                                    <th>Prácticas esta semana:</th>
+                                                    <td>{{ weekly_practices or 0 }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Respuestas correctas:</th>
+                                                    <td>{{ correct_answers or 0 }}</td>
+                                                    <th>Precisión:</th>
+                                                    <td>{{ accuracy or 0 }}%</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Tiempo total de estudio:</th>
+                                                    <td>{{ total_hours or 0 }} horas</td>
+                                                    <th>Flashcards estudiadas:</th>
+                                                    <td>{{ flashcards_studied or 0 }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Exámenes realizados:</th>
+                                                    <td>{{ exams_taken or 0 }}</td>
+                                                    <th>Mejor puntuación:</th>
+                                                    <td>{{ best_score or 0 }}%</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Pestaña: Logros -->
+                    <div class="tab-pane fade" id="achievements">
+                        <div class="row g-3">
+                            {% if achievements %}
+                                {% for achievement in achievements %}
+                                <div class="col-md-6">
+                                    <div class="card achievement-card {% if not achievement.earned %}opacity-50{% endif %}">
+                                        <div class="card-body d-flex align-items-center">
+                                            <div class="flex-shrink-0 me-3">
+                                                <i class="fas fa-{{ achievement.icon }} fa-2x text-{{ achievement.color }}"></i>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <h6 class="fw-bold mb-1">{{ achievement.name }}</h6>
+                                                <p class="small text-muted mb-2">{{ achievement.description }}</p>
+                                                {% if achievement.progress is defined %}
+                                                <div class="progress" style="height: 5px;">
+                                                    <div class="progress-bar bg-{{ achievement.color }}" 
+                                                         style="width: {{ achievement.progress }}%"></div>
+                                                </div>
+                                                <small class="text-muted">{{ achievement.progress }}/{{ achievement.total }}</small>
+                                                {% else %}
+                                                    {% if achievement.earned %}
+                                                    <span class="badge bg-success"><i class="fas fa-check"></i> Completado</span>
+                                                    {% else %}
+                                                    <span class="badge bg-secondary">Por completar</span>
+                                                    {% endif %}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="col-12 text-center py-4">
+                                    <i class="fas fa-trophy fa-3x text-muted mb-3"></i>
+                                    <p class="text-muted">Aún no has obtenido logros. ¡Sigue practicando!</p>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <!-- Pestaña: Seguridad -->
+                    <div class="tab-pane fade" id="security">
+                        <div class="alert alert-info mb-4">
+                            <i class="fas fa-shield-alt me-2"></i>
+                            Mantén tu cuenta segura con estas opciones de seguridad.
+                        </div>
+                        
+                        <div class="mb-4">
+                            <h6 class="fw-bold mb-3"><i class="fas fa-lock text-primary me-2"></i>Autenticación de dos factores</h6>
+                            <div class="form-check form-switch mb-3">
+                                <input class="form-check-input" type="checkbox" id="twoFactorAuth" 
+                                       {% if current_user.two_factor_enabled %}checked{% endif %}>
+                                <label class="form-check-label" for="twoFactorAuth">
+                                    Activar verificación en dos pasos
+                                </label>
+                            </div>
+                            <p class="small text-muted">
+                                Añade una capa extra de seguridad a tu cuenta. Recibirás un código en tu teléfono al iniciar sesión.
+                            </p>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <h6 class="fw-bold mb-3"><i class="fas fa-bell text-warning me-2"></i>Notificaciones de seguridad</h6>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="notifyLogin" checked>
+                                <label class="form-check-label" for="notifyLogin">
+                                    Notificarme cuando haya un inicio de sesión desde un nuevo dispositivo
+                                </label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="notifyPassword" checked>
+                                <label class="form-check-label" for="notifyPassword">
+                                    Notificarme cuando cambie mi contraseña
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <h6 class="fw-bold mb-3"><i class="fas fa-history text-info me-2"></i>Sesiones activas</h6>
+                            <div class="list-group">
+                                {% for session in active_sessions %}
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <i class="fas fa-{{ 'laptop' if session.device == 'computer' else 'mobile-alt' }} me-2"></i>
+                                        {{ session.device_name }} - {{ session.location }}
+                                        <br>
+                                        <small class="text-muted">Último acceso: {{ session.last_active }}</small>
+                                    </div>
+                                    {% if session.current %}
+                                    <span class="badge bg-success">Actual</span>
+                                    {% else %}
+                                    <button class="btn btn-sm btn-outline-danger" onclick="terminateSession({{ session.id }})">
+                                        <i class="fas fa-times"></i> Terminar
+                                    </button>
+                                    {% endif %}
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                        <div class="text-center mt-4">
+                            <button class="btn btn-outline-danger" onclick="showDeleteAccountModal()">
+                                <i class="fas fa-trash-alt"></i> Eliminar cuenta
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Editar Perfil -->
+<div class="modal fade" id="editProfileModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fas fa-user-edit"></i> Editar Perfil</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editProfileForm">
+                    <div class="mb-3">
+                        <label class="form-label">Nombre completo</label>
+                        <input type="text" class="form-control" id="editFullName" value="{{ current_user.full_name or '' }}">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Ubicación</label>
+                        <input type="text" class="form-control" id="editLocation" value="{{ current_user.location or '' }}">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Biografía</label>
+                        <textarea class="form-control" id="editBio" rows="3">{{ current_user.bio or '' }}</textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="saveProfileChanges()">Guardar cambios</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Cambiar Contraseña -->
+<div class="modal fade" id="changePasswordModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fas fa-key"></i> Cambiar Contraseña</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="changePasswordForm">
+                    <div class="mb-3">
+                        <label class="form-label">Contraseña actual</label>
+                        <input type="password" class="form-control" id="currentPassword">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Nueva contraseña</label>
+                        <input type="password" class="form-control" id="newPassword">
+                        <div class="password-strength mt-2">
+                            <div class="progress" style="height: 5px;">
+                                <div class="progress-bar" id="passwordStrength" style="width: 0%"></div>
+                            </div>
+                            <small class="text-muted" id="passwordStrengthText"></small>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Confirmar nueva contraseña</label>
+                        <input type="password" class="form-control" id="confirmPassword">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="changePassword()">Cambiar contraseña</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Eliminar Cuenta -->
+<div class="modal fade" id="deleteAccountModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title"><i class="fas fa-exclamation-triangle"></i> Eliminar Cuenta</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p class="fw-bold text-danger">¿Estás seguro de que deseas eliminar tu cuenta?</p>
+                <p>Esta acción no se puede deshacer. Se eliminarán permanentemente:</p>
+                <ul>
+                    <li>Tu perfil y datos personales</li>
+                    <li>Todo tu historial de práctica</li>
+                    <li>Tus logros y progreso</li>
+                    <li>Tus ejercicios guardados</li>
+                </ul>
+                <div class="mb-3">
+                    <label class="form-label">Escribe "ELIMINAR" para confirmar:</label>
+                    <input type="text" class="form-control" id="confirmDelete">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" onclick="deleteAccount()">Eliminar cuenta</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-gradient-profile {
+        background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+    }
+    
+    .avatar-circle {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+    }
+    
+    .avatar-initials {
+        font-size: 3rem;
+        font-weight: bold;
+        color: white;
+    }
+    
+    .stat-mini {
+        background: #f8f9fa;
+        padding: 0.5rem;
+        border-radius: 10px;
+        text-align: center;
+    }
+    
+    .stat-card {
+        transition: all 0.3s ease;
+        border: 1px solid rgba(0,0,0,0.05);
+    }
+    
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+    
+    .achievement-card {
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+    }
+    
+    .achievement-card:hover {
+        border-color: #4a6fa5;
+        transform: translateX(5px);
+    }
+    
+    .nav-tabs .nav-link {
+        color: #495057;
+        border: none;
+        padding: 0.8rem 1.2rem;
+        transition: all 0.3s ease;
+    }
+    
+    .nav-tabs .nav-link:hover {
+        border: none;
+        background: rgba(74, 111, 165, 0.1);
+    }
+    
+    .nav-tabs .nav-link.active {
+        color: #4a6fa5;
+        background: transparent;
+        border-bottom: 3px solid #4a6fa5;
+    }
+    
+    .list-group-item {
+        transition: all 0.2s ease;
+    }
+    
+    .list-group-item:hover {
+        background: #f8f9fa;
+    }
+</style>
+
+<script>
+    // Gráficos
+    document.addEventListener('DOMContentLoaded', function() {
+        if (document.getElementById('practiceChart')) {
+            const ctx1 = document.getElementById('practiceChart').getContext('2d');
+            new Chart(ctx1, {
+                type: 'line',
+                data: {
+                    labels: {{ weekly_labels|tojson }},
+                    datasets: [{
+                        label: 'Prácticas diarias',
+                        data: {{ weekly_data|tojson }},
+                        borderColor: '#4a6fa5',
+                        backgroundColor: 'rgba(74, 111, 165, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+        
+        if (document.getElementById('accuracyChart')) {
+            const ctx2 = document.getElementById('accuracyChart').getContext('2d');
+            new Chart(ctx2, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Correctas', 'Incorrectas'],
+                    datasets: [{
+                        data: [{{ correct_answers or 0 }}, {{ total_practices - correct_answers or 0 }}],
+                        backgroundColor: ['#28a745', '#dc3545']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '70%'
+                }
+            });
+        }
+    });
+    
+    function previewAvatar(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('avatarPreview').style.backgroundImage = `url('${e.target.result}')`;
+                document.getElementById('avatarPreview').style.backgroundSize = 'cover';
+                document.getElementById('avatarPreview').innerHTML = '';
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    
+    function showEditProfileModal() {
+        new bootstrap.Modal(document.getElementById('editProfileModal')).show();
+    }
+    
+    function showChangePasswordModal() {
+        new bootstrap.Modal(document.getElementById('changePasswordModal')).show();
+    }
+    
+    function showDeleteAccountModal() {
+        new bootstrap.Modal(document.getElementById('deleteAccountModal')).show();
+    }
+    
+    function saveProfileChanges() {
+        const data = {
+            full_name: document.getElementById('editFullName').value,
+            location: document.getElementById('editLocation').value,
+            bio: document.getElementById('editBio').value
+        };
+        
+        fetch('/api/user/update', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showNotification('Perfil actualizado correctamente', 'success');
+                bootstrap.Modal.getInstance(document.getElementById('editProfileModal')).hide();
+                setTimeout(() => location.reload(), 1500);
+            }
+        });
+    }
+    
+    function saveProfile() {
+        const data = {
+            full_name: document.getElementById('fullName').value,
+            phone: document.getElementById('phone').value,
+            birth_date: document.getElementById('birthDate').value,
+            country: document.getElementById('country').value,
+            address: document.getElementById('address').value,
+            bio: document.getElementById('bio').value,
+            website: document.getElementById('website').value
+        };
+        
+        fetch('/api/user/update', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showNotification('Perfil actualizado correctamente', 'success');
+            }
+        });
+    }
+    
+    function updateLanguagePreference() {
+        const data = {
+            ui_language: document.getElementById('uiLanguage').value,
+            practice_language: document.getElementById('practiceLanguage').value
+        };
+        
+        fetch('/api/user/language', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showNotification('Preferencias de idioma actualizadas', 'success');
+            }
+        });
+    }
+    
+    function changePassword() {
+        const current = document.getElementById('currentPassword').value;
+        const newPass = document.getElementById('newPassword').value;
+        const confirm = document.getElementById('confirmPassword').value;
+        
+        if (newPass !== confirm) {
+            showNotification('Las contraseñas no coinciden', 'danger');
+            return;
+        }
+        
+        fetch('/api/user/change-password', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                current_password: current,
+                new_password: newPass
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showNotification('Contraseña cambiada correctamente', 'success');
+                bootstrap.Modal.getInstance(document.getElementById('changePasswordModal')).hide();
+                document.getElementById('changePasswordForm').reset();
+            } else {
+                showNotification(data.error || 'Error al cambiar contraseña', 'danger');
+            }
+        });
+    }
+    
+    function terminateSession(sessionId) {
+        if (confirm('¿Terminar esta sesión?')) {
+            fetch(`/api/sessions/${sessionId}/terminate`, {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showNotification('Sesión terminada', 'success');
+                    setTimeout(() => location.reload(), 1500);
+                }
+            });
+        }
+    }
+    
+    function deleteAccount() {
+        const confirm = document.getElementById('confirmDelete').value;
+        
+        if (confirm !== 'ELIMINAR') {
+            showNotification('Por favor escribe "ELIMINAR" para confirmar', 'warning');
+            return;
+        }
+        
+        fetch('/api/user/delete', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showNotification('Cuenta eliminada. Redirigiendo...', 'success');
+                setTimeout(() => window.location.href = '/', 2000);
+            }
+        });
+    }
+    
+    // Medidor de fortaleza de contraseña
+    document.getElementById('newPassword')?.addEventListener('input', function() {
+        const password = this.value;
+        let strength = 0;
+        
+        if (password.length >= 8) strength += 25;
+        if (password.match(/[a-z]+/)) strength += 25;
+        if (password.match(/[A-Z]+/)) strength += 25;
+        if (password.match(/[0-9]+/)) strength += 15;
+        if (password.match(/[$@#&!]+/)) strength += 10;
+        
+        document.getElementById('passwordStrength').style.width = strength + '%';
+        document.getElementById('passwordStrength').className = 
+            strength < 50 ? 'progress-bar bg-danger' : 
+            strength < 75 ? 'progress-bar bg-warning' : 
+            'progress-bar bg-success';
+        
+        const texts = ['Muy débil', 'Débil', 'Media', 'Fuerte', 'Muy fuerte'];
+        const index = Math.floor(strength / 25);
+        document.getElementById('passwordStrengthText').textContent = texts[index] || '';
+    });
+    
+    function showNotification(message, type) {
+        const notification = document.createElement('div');
+        notification.className = `alert alert-${type} notification-popup`;
+        notification.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 
+                                                     type === 'danger' ? 'exclamation-circle' : 'info-circle'}"></i> ${message}`;
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            animation: slideIn 0.3s ease;
+        `;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
+    }
+</script>
+{% endblock %}

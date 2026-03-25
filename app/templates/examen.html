@@ -1,0 +1,770 @@
+{% extends "base.html" %}
+
+{% block title %}Examen - Escritor de Frases Claras{% endblock %}
+
+{% block content %}
+<!-- Encabezado -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card bg-gradient-danger text-white border-0 shadow">
+            <div class="card-body p-4">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h2 class="display-5 fw-bold mb-3">
+                            <i class="fas fa-clipboard-list me-2"></i> 
+                            Examen de Frases
+                        </h2>
+                        <p class="lead mb-0 opacity-90">
+                            <i class="fas fa-graduation-cap me-2"></i>
+                            Demuestra tu dominio de la construcción de frases claras
+                        </p>
+                    </div>
+                    <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                        <div class="d-inline-block bg-white bg-opacity-25 rounded-3 p-3">
+                            <i class="fas fa-hourglass-half fa-2x mb-2"></i>
+                            <h3 class="mb-0" id="timer">20:00</h3>
+                            <small>Tiempo restante</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Información del examen -->
+<div class="row mb-4">
+    <div class="col-lg-3 col-md-6 mb-3">
+        <div class="card stat-card h-100 border-start border-primary border-4">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-question-circle fa-2x text-primary"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="text-muted mb-1">Preguntas</h6>
+                        <h4 class="mb-0 fw-bold" id="totalQuestions">20</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-3 col-md-6 mb-3">
+        <div class="card stat-card h-100 border-start border-success border-4">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-check-circle fa-2x text-success"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="text-muted mb-1">Respondidas</h6>
+                        <h4 class="mb-0 fw-bold" id="answeredCount">0</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-3 col-md-6 mb-3">
+        <div class="card stat-card h-100 border-start border-warning border-4">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-star fa-2x text-warning"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="text-muted mb-1">Calificación</h6>
+                        <h4 class="mb-0 fw-bold" id="grade">--</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-3 col-md-6 mb-3">
+        <div class="card stat-card h-100 border-start border-info border-4">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-chart-line fa-2x text-info"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="text-muted mb-1">Progreso</h6>
+                        <div class="progress mt-2" style="height: 10px;">
+                            <div class="progress-bar bg-info" id="progressBar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Configuración del examen -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card shadow">
+            <div class="card-header bg-white">
+                <h5 class="mb-0"><i class="fas fa-cog me-2"></i>Configuración del Examen</h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">Número de preguntas</label>
+                        <select class="form-select" id="questionCount">
+                            <option value="10">10 preguntas</option>
+                            <option value="20" selected>20 preguntas</option>
+                            <option value="30">30 preguntas</option>
+                            <option value="50">50 preguntas</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">Dificultad</label>
+                        <select class="form-select" id="difficulty">
+                            <option value="all">Todas</option>
+                            <option value="easy">Fácil</option>
+                            <option value="intermediate" selected>Intermedio</option>
+                            <option value="advanced">Avanzado</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">Categoría</label>
+                        <select class="form-select" id="category">
+                            <option value="all">Todas</option>
+                            {% for category in categories %}
+                            <option value="{{ category }}">{{ category|capitalize }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-bold">Tiempo límite</label>
+                        <select class="form-select" id="timeLimit">
+                            <option value="10">10 minutos</option>
+                            <option value="20" selected>20 minutos</option>
+                            <option value="30">30 minutos</option>
+                            <option value="0">Sin límite</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="text-center mt-4">
+                    <button class="btn btn-primary btn-lg px-5" onclick="startExam()" id="startBtn">
+                        <i class="fas fa-play-circle"></i> Comenzar Examen
+                    </button>
+                    <button class="btn btn-danger btn-lg px-5" onclick="resetExam()" id="resetBtn" style="display: none;">
+                        <i class="fas fa-redo-alt"></i> Reiniciar Examen
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Área del examen -->
+<div class="row" id="examArea" style="display: none;">
+    <div class="col-lg-8 mx-auto">
+        <div class="card shadow-lg border-0">
+            <div class="card-header bg-white border-0 pt-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <span class="badge bg-primary" id="questionTypeBadge">
+                            <i class="fas fa-question-circle"></i> Pregunta <span id="currentQuestion">1</span>/<span id="totalQuestions2">20</span>
+                        </span>
+                    </h5>
+                    <span class="badge bg-info" id="questionDifficulty"></span>
+                </div>
+            </div>
+            
+            <div class="card-body p-4">
+                <!-- Pregunta -->
+                <div class="text-center mb-4">
+                    <p class="lead text-muted mb-2">Frase a analizar:</p>
+                    <h4 class="fw-bold text-primary" id="questionText"></h4>
+                </div>
+                
+                <!-- Instrucciones según tipo -->
+                <div class="alert alert-light border mb-4" id="instructions">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <span id="instructionText">Selecciona el orden correcto de los componentes</span>
+                </div>
+                
+                <!-- Opciones de respuesta -->
+                <div id="optionsContainer" class="mb-4"></div>
+                
+                <!-- Área de texto para respuestas escritas -->
+                <div id="writtenAnswerContainer" class="mb-4" style="display: none;">
+                    <label class="form-label fw-bold">Tu respuesta:</label>
+                    <textarea class="form-control" id="writtenAnswer" rows="3" placeholder="Escribe tu respuesta aquí..."></textarea>
+                </div>
+                
+                <!-- Botones de navegación -->
+                <div class="d-flex justify-content-between">
+                    <button class="btn btn-outline-secondary" onclick="previousQuestion()" id="prevBtn" disabled>
+                        <i class="fas fa-chevron-left"></i> Anterior
+                    </button>
+                    <div>
+                        <button class="btn btn-success me-2" onclick="saveAnswer()" id="saveBtn">
+                            <i class="fas fa-save"></i> Guardar
+                        </button>
+                        <button class="btn btn-warning" onclick="flagQuestion()" id="flagBtn">
+                            <i class="fas fa-flag"></i> Marcar
+                        </button>
+                    </div>
+                    <button class="btn btn-outline-primary" onclick="nextQuestion()" id="nextBtn">
+                        Siguiente <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Miniaturas de preguntas -->
+        <div class="card mt-4 shadow">
+            <div class="card-body">
+                <h6 class="mb-3"><i class="fas fa-th"></i> Navegación rápida</h6>
+                <div class="d-flex flex-wrap gap-2" id="questionThumbnails"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de resultados -->
+<div class="modal fade" id="resultsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title"><i class="fas fa-trophy"></i> Resultados del Examen</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center mb-4">
+                    <div class="display-1 fw-bold" id="finalScore">0%</div>
+                    <h3 id="finalGrade">Reprobado</h3>
+                </div>
+                
+                <div class="row mb-4">
+                    <div class="col-4 text-center">
+                        <div class="stat-circle">
+                            <span class="d-block fs-1 fw-bold text-primary" id="totalCorrect">0</span>
+                            <span class="text-muted">Correctas</span>
+                        </div>
+                    </div>
+                    <div class="col-4 text-center">
+                        <div class="stat-circle">
+                            <span class="d-block fs-1 fw-bold text-danger" id="totalIncorrect">0</span>
+                            <span class="text-muted">Incorrectas</span>
+                        </div>
+                    </div>
+                    <div class="col-4 text-center">
+                        <div class="stat-circle">
+                            <span class="d-block fs-1 fw-bold text-warning" id="totalFlagged">0</span>
+                            <span class="text-muted">Marcadas</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <h6>Desglose por tipo:</h6>
+                <div class="table-responsive">
+                    <table class="table table-sm" id="resultsTable">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Tipo</th>
+                                <th>Tu respuesta</th>
+                                <th>Correcta</th>
+                                <th>Resultado</th>
+                            </tr>
+                        </thead>
+                        <tbody id="resultsBody"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" onclick="reviewExam()">Revisar Examen</button>
+                <button type="button" class="btn btn-success" onclick="newExam()">Nuevo Examen</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-gradient-danger {
+        background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    }
+    
+    .stat-card {
+        transition: all 0.3s ease;
+        border-left-width: 4px !important;
+    }
+    
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+    
+    .option-card {
+        cursor: pointer;
+        transition: all 0.2s ease;
+        border: 2px solid transparent;
+    }
+    
+    .option-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        border-color: #4a6fa5;
+    }
+    
+    .option-card.selected {
+        background: #e3f2fd;
+        border-color: #4a6fa5;
+    }
+    
+    .question-thumbnail {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    
+    .question-thumbnail:hover {
+        transform: scale(1.1);
+    }
+    
+    .question-thumbnail.answered {
+        background: #4a6fa5;
+        color: white;
+    }
+    
+    .question-thumbnail.current {
+        border: 3px solid #ffb347;
+        transform: scale(1.05);
+    }
+    
+    .question-thumbnail.flagged {
+        background: #ffc107;
+        color: #000;
+    }
+    
+    .stat-circle {
+        padding: 1rem;
+        border-radius: 50%;
+        background: #f8f9fa;
+        display: inline-block;
+        min-width: 120px;
+    }
+    
+    .timer-warning {
+        animation: pulse 1s infinite;
+    }
+    
+    @keyframes pulse {
+        0% { opacity: 1; }
+        50% { opacity: 0.5; }
+        100% { opacity: 1; }
+    }
+</style>
+
+<script>
+    // Variables del examen
+    let examQuestions = [];
+    let userAnswers = [];
+    let currentQuestionIndex = 0;
+    let examStarted = false;
+    let examTimer = null;
+    let timeRemaining = 0;
+    let flaggedQuestions = new Set();
+    
+    function startExam() {
+        // Obtener configuración
+        const questionCount = parseInt(document.getElementById('questionCount').value);
+        const difficulty = document.getElementById('difficulty').value;
+        const category = document.getElementById('category').value;
+        const timeLimit = parseInt(document.getElementById('timeLimit').value);
+        
+        // Cargar preguntas
+        loadExamQuestions(questionCount, difficulty, category);
+        
+        // Configurar temporizador
+        if (timeLimit > 0) {
+            timeRemaining = timeLimit * 60;
+            startTimer();
+        }
+        
+        // Mostrar área de examen
+        document.getElementById('examArea').style.display = 'block';
+        document.getElementById('startBtn').style.display = 'none';
+        document.getElementById('resetBtn').style.display = 'inline-block';
+        
+        // Actualizar totales
+        document.getElementById('totalQuestions').textContent = questionCount;
+        document.getElementById('totalQuestions2').textContent = questionCount;
+        document.getElementById('progressBar').style.width = '0%';
+        
+        examStarted = true;
+    }
+    
+    function loadExamQuestions(count, difficulty, category) {
+        fetch(`/api/exam/questions?count=${count}&difficulty=${difficulty}&category=${category}`)
+            .then(response => response.json())
+            .then(data => {
+                examQuestions = data;
+                userAnswers = new Array(data.length).fill(null);
+                displayQuestion(0);
+                updateThumbnails();
+            })
+            .catch(error => {
+                console.error('Error loading exam questions:', error);
+            });
+    }
+    
+    function displayQuestion(index) {
+        const question = examQuestions[index];
+        
+        document.getElementById('currentQuestion').textContent = index + 1;
+        document.getElementById('questionText').textContent = question.spanish;
+        document.getElementById('questionDifficulty').textContent = question.difficulty || 'intermediate';
+        
+        // Configurar según tipo
+        if (question.type === 'order') {
+            displayOrderOptions(question);
+        } else if (question.type === 'translation') {
+            displayTranslationOptions(question);
+        } else {
+            displayRewriteOptions(question);
+        }
+        
+        // Cargar respuesta guardada si existe
+        if (userAnswers[index] !== null) {
+            loadSavedAnswer(userAnswers[index]);
+        }
+        
+        // Actualizar navegación
+        document.getElementById('prevBtn').disabled = index === 0;
+        document.getElementById('nextBtn').disabled = index === examQuestions.length - 1;
+        
+        // Actualizar thumbnail actual
+        updateThumbnails();
+    }
+    
+    function displayOrderOptions(question) {
+        document.getElementById('instructionText').textContent = 
+            'Selecciona el orden correcto de los componentes:';
+        
+        // Generar permutaciones de los componentes
+        const permutations = generatePermutations(question.components);
+        
+        let html = '<div class="row g-3">';
+        permutations.forEach((perm, i) => {
+            html += `
+                <div class="col-md-6">
+                    <div class="card option-card" onclick="selectOption(${i})" id="option-${i}">
+                        <div class="card-body text-center">
+                            ${perm.join(' → ')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        html += '</div>';
+        
+        document.getElementById('optionsContainer').innerHTML = html;
+        document.getElementById('writtenAnswerContainer').style.display = 'none';
+    }
+    
+    function displayTranslationOptions(question) {
+        document.getElementById('instructionText').textContent = 
+            'Escribe la traducción correcta al inglés:';
+        document.getElementById('optionsContainer').innerHTML = '';
+        document.getElementById('writtenAnswerContainer').style.display = 'block';
+    }
+    
+    function displayRewriteOptions(question) {
+        document.getElementById('instructionText').textContent = 
+            'Reescribe la frase con el orden correcto de los componentes:';
+        document.getElementById('optionsContainer').innerHTML = '';
+        document.getElementById('writtenAnswerContainer').style.display = 'block';
+    }
+    
+    function generatePermutations(arr) {
+        // Generar 4 permutaciones diferentes
+        const permutations = [];
+        permutations.push([...arr]); // Orden correcto
+        
+        for (let i = 1; i < 4; i++) {
+            const perm = [...arr];
+            for (let j = perm.length - 1; j > 0; j--) {
+                const k = Math.floor(Math.random() * (j + 1));
+                [perm[j], perm[k]] = [perm[k], perm[j]];
+            }
+            permutations.push(perm);
+        }
+        
+        // Mezclar para que el orden correcto no sea siempre primero
+        return permutations.sort(() => Math.random() - 0.5);
+    }
+    
+    function selectOption(index) {
+        // Deseleccionar todas las opciones
+        document.querySelectorAll('.option-card').forEach(card => {
+            card.classList.remove('selected');
+        });
+        
+        // Seleccionar la opción elegida
+        document.getElementById(`option-${index}`).classList.add('selected');
+        
+        // Guardar respuesta
+        userAnswers[currentQuestionIndex] = {
+            type: 'option',
+            value: index
+        };
+        
+        // Marcar como respondida
+        markAsAnswered(currentQuestionIndex);
+    }
+    
+    function saveAnswer() {
+        const question = examQuestions[currentQuestionIndex];
+        
+        if (question.type === 'order') {
+            // Ya se guardó al seleccionar
+        } else {
+            const answer = document.getElementById('writtenAnswer').value.trim();
+            userAnswers[currentQuestionIndex] = {
+                type: 'written',
+                value: answer
+            };
+        }
+        
+        // Marcar como respondida
+        markAsAnswered(currentQuestionIndex);
+        
+        // Mostrar mensaje de confirmación
+        showNotification('Respuesta guardada', 'success');
+    }
+    
+    function markAsAnswered(index) {
+        document.getElementById('answeredCount').textContent = 
+            userAnswers.filter(a => a !== null).length;
+        
+        const progress = (userAnswers.filter(a => a !== null).length / examQuestions.length) * 100;
+        document.getElementById('progressBar').style.width = progress + '%';
+        
+        updateThumbnails();
+    }
+    
+    function flagQuestion() {
+        if (flaggedQuestions.has(currentQuestionIndex)) {
+            flaggedQuestions.delete(currentQuestionIndex);
+            document.getElementById('flagBtn').innerHTML = '<i class="fas fa-flag"></i> Marcar';
+            document.getElementById('flagBtn').classList.remove('btn-warning');
+            document.getElementById('flagBtn').classList.add('btn-outline-warning');
+        } else {
+            flaggedQuestions.add(currentQuestionIndex);
+            document.getElementById('flagBtn').innerHTML = '<i class="fas fa-flag"></i> Desmarcar';
+            document.getElementById('flagBtn').classList.remove('btn-outline-warning');
+            document.getElementById('flagBtn').classList.add('btn-warning');
+        }
+        
+        document.getElementById('totalFlagged').textContent = flaggedQuestions.size;
+        updateThumbnails();
+    }
+    
+    function nextQuestion() {
+        if (currentQuestionIndex < examQuestions.length - 1) {
+            currentQuestionIndex++;
+            displayQuestion(currentQuestionIndex);
+            updateFlagButton();
+        }
+    }
+    
+    function previousQuestion() {
+        if (currentQuestionIndex > 0) {
+            currentQuestionIndex--;
+            displayQuestion(currentQuestionIndex);
+            updateFlagButton();
+        }
+    }
+    
+    function loadSavedAnswer(answer) {
+        if (answer.type === 'option') {
+            document.getElementById(`option-${answer.value}`)?.classList.add('selected');
+        } else {
+            document.getElementById('writtenAnswer').value = answer.value;
+        }
+    }
+    
+    function updateFlagButton() {
+        if (flaggedQuestions.has(currentQuestionIndex)) {
+            document.getElementById('flagBtn').innerHTML = '<i class="fas fa-flag"></i> Desmarcar';
+            document.getElementById('flagBtn').classList.remove('btn-outline-warning');
+            document.getElementById('flagBtn').classList.add('btn-warning');
+        } else {
+            document.getElementById('flagBtn').innerHTML = '<i class="fas fa-flag"></i> Marcar';
+            document.getElementById('flagBtn').classList.remove('btn-warning');
+            document.getElementById('flagBtn').classList.add('btn-outline-warning');
+        }
+    }
+    
+    function updateThumbnails() {
+        const container = document.getElementById('questionThumbnails');
+        let html = '';
+        
+        for (let i = 0; i < examQuestions.length; i++) {
+            let classes = 'question-thumbnail';
+            if (userAnswers[i] !== null) classes += ' answered';
+            if (flaggedQuestions.has(i)) classes += ' flagged';
+            if (i === currentQuestionIndex) classes += ' current';
+            
+            html += `
+                <div class="${classes}" onclick="jumpToQuestion(${i})">
+                    ${i + 1}
+                </div>
+            `;
+        }
+        
+        container.innerHTML = html;
+    }
+    
+    function jumpToQuestion(index) {
+        currentQuestionIndex = index;
+        displayQuestion(index);
+        updateFlagButton();
+    }
+    
+    function submitExam() {
+        // Calcular resultados
+        let correctCount = 0;
+        const results = [];
+        
+        examQuestions.forEach((question, index) => {
+            const answer = userAnswers[index];
+            let isCorrect = false;
+            
+            if (question.type === 'order' && answer && answer.type === 'option') {
+                const correctOrder = question.components.join(' ');
+                const selectedOrder = generatePermutations(question.components)[answer.value].join(' ');
+                isCorrect = selectedOrder === correctOrder;
+            } else if (question.type === 'translation' && answer && answer.type === 'written') {
+                isCorrect = answer.value.toLowerCase() === question.english.toLowerCase();
+            } else if (question.type === 'rewrite' && answer && answer.type === 'written') {
+                const correctOrder = question.components.join(' ');
+                isCorrect = answer.value.toLowerCase() === correctOrder.toLowerCase();
+            }
+            
+            if (isCorrect) correctCount++;
+            
+            results.push({
+                question: index + 1,
+                type: question.type,
+                userAnswer: answer ? answer.value : 'No respondida',
+                correctAnswer: question.type === 'order' ? question.components.join(' ') : 
+                             question.type === 'translation' ? question.english : 
+                             question.components.join(' '),
+                isCorrect: isCorrect
+            });
+        });
+        
+        // Mostrar resultados
+        const score = Math.round((correctCount / examQuestions.length) * 100);
+        const grade = score >= 90 ? 'Excelente' :
+                     score >= 70 ? 'Aprobado' :
+                     score >= 50 ? 'Regular' : 'Reprobado';
+        
+        document.getElementById('finalScore').textContent = score + '%';
+        document.getElementById('finalGrade').textContent = grade;
+        document.getElementById('totalCorrect').textContent = correctCount;
+        document.getElementById('totalIncorrect').textContent = examQuestions.length - correctCount;
+        
+        // Mostrar tabla de resultados
+        const tbody = document.getElementById('resultsBody');
+        tbody.innerHTML = results.map(r => `
+            <tr class="${r.isCorrect ? 'table-success' : 'table-danger'}">
+                <td>${r.question}</td>
+                <td>${r.type}</td>
+                <td>${r.userAnswer}</td>
+                <td>${r.correctAnswer}</td>
+                <td><i class="fas fa-${r.isCorrect ? 'check text-success' : 'times text-danger'}"></i></td>
+            </tr>
+        `).join('');
+        
+        // Mostrar modal
+        new bootstrap.Modal(document.getElementById('resultsModal')).show();
+        
+        // Detener temporizador
+        if (examTimer) {
+            clearInterval(examTimer);
+        }
+    }
+    
+    function startTimer() {
+        examTimer = setInterval(() => {
+            timeRemaining--;
+            
+            const minutes = Math.floor(timeRemaining / 60);
+            const seconds = timeRemaining % 60;
+            document.getElementById('timer').textContent = 
+                `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (timeRemaining <= 60) {
+                document.getElementById('timer').classList.add('timer-warning');
+            }
+            
+            if (timeRemaining <= 0) {
+                clearInterval(examTimer);
+                submitExam();
+            }
+        }, 1000);
+    }
+    
+    function resetExam() {
+        examQuestions = [];
+        userAnswers = [];
+        currentQuestionIndex = 0;
+        flaggedQuestions.clear();
+        examStarted = false;
+        
+        if (examTimer) {
+            clearInterval(examTimer);
+        }
+        
+        document.getElementById('examArea').style.display = 'none';
+        document.getElementById('startBtn').style.display = 'inline-block';
+        document.getElementById('resetBtn').style.display = 'none';
+        document.getElementById('timer').textContent = '20:00';
+        document.getElementById('timer').classList.remove('timer-warning');
+    }
+    
+    function reviewExam() {
+        // Cerrar modal y volver al examen
+        bootstrap.Modal.getInstance(document.getElementById('resultsModal')).hide();
+    }
+    
+    function newExam() {
+        resetExam();
+        bootstrap.Modal.getInstance(document.getElementById('resultsModal')).hide();
+    }
+    
+    function showNotification(message, type) {
+        const notification = document.createElement('div');
+        notification.className = `alert alert-${type} notification-popup`;
+        notification.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'}"></i> ${message}`;
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            animation: slideIn 0.3s ease;
+        `;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
+    }
+</script>
+{% endblock %}

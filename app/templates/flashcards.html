@@ -1,0 +1,683 @@
+{% extends "base.html" %}
+
+{% block title %}Flashcards - Escritor de Frases Claras{% endblock %}
+
+{% block content %}
+<!-- Encabezado -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card bg-gradient-primary text-white border-0 shadow">
+            <div class="card-body p-4">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h2 class="display-5 fw-bold mb-3">
+                            <i class="fas fa-layer-group me-2"></i> 
+                            Flashcards Interactivas
+                        </h2>
+                        <p class="lead mb-0 opacity-90">
+                            <i class="fas fa-brain me-2"></i>
+                            Aprende y repasa 100 frases con nuestro sistema de repetición espaciada
+                        </p>
+                    </div>
+                    <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                        <div class="d-inline-block bg-white bg-opacity-25 rounded-3 p-3">
+                            <i class="fas fa-fire fa-2x mb-2"></i>
+                            <h3 class="mb-0">{{ total_studied }}/100</h3>
+                            <small>Estudiadas</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Estadísticas rápidas -->
+<div class="row mb-4">
+    <div class="col-xl-3 col-md-6 mb-3">
+        <div class="card stat-card h-100 border-start border-primary border-4">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-check-circle fa-2x text-primary"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="text-muted mb-1">Tasa de Éxito</h6>
+                        <h4 class="mb-0 fw-bold">{{ success_rate }}%</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-3">
+        <div class="card stat-card h-100 border-start border-success border-4">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-fire fa-2x text-success"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="text-muted mb-1">Racha Actual</h6>
+                        <h4 class="mb-0 fw-bold">{{ streak }} días</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-3">
+        <div class="card stat-card h-100 border-start border-warning border-4">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-clock fa-2x text-warning"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="text-muted mb-1">Por Revisar</h6>
+                        <h4 class="mb-0 fw-bold">{{ due_count }}</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-3">
+        <div class="card stat-card h-100 border-start border-info border-4">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-star fa-2x text-info"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="text-muted mb-1">Dominadas</h6>
+                        <h4 class="mb-0 fw-bold">{{ mastered_count }}</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Filtros y controles -->
+<div class="row mb-4">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold"><i class="fas fa-filter"></i> Categoría</label>
+                        <select class="form-select" id="categoryFilter">
+                            <option value="all">Todas las categorías</option>
+                            {% for category in categories %}
+                            <option value="{{ category }}">{{ category|capitalize }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold"><i class="fas fa-chart-bar"></i> Dificultad</label>
+                        <select class="form-select" id="difficultyFilter">
+                            <option value="all">Todas</option>
+                            <option value="easy">Fácil</option>
+                            <option value="intermediate">Intermedio</option>
+                            <option value="advanced">Avanzado</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold"><i class="fas fa-sort"></i> Modo</label>
+                        <select class="form-select" id="studyMode">
+                            <option value="random">Aleatorio</option>
+                            <option value="due">Debidas (SRS)</option>
+                            <option value="weak">Más débiles</option>
+                            <option value="new">Sin estudiar</option>
+                            <option value="mastered">Dominadas</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card shadow h-100">
+            <div class="card-body d-flex align-items-center justify-content-center">
+                <div class="text-center">
+                    <span class="badge bg-primary p-2 mb-2">
+                        <i class="fas fa-layer-group"></i> {{ filtered_count }} flashcards
+                    </span>
+                    <button class="btn btn-outline-primary btn-sm w-100" onclick="applyFilters()">
+                        <i class="fas fa-sync-alt"></i> Aplicar Filtros
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Área de la flashcard principal -->
+<div class="row mb-4">
+    <div class="col-lg-8 mx-auto">
+        <div class="card shadow-lg border-0" id="flashcardContainer">
+            <div class="card-body p-0">
+                <!-- Indicadores de progreso -->
+                <div class="progress" style="height: 5px;">
+                    <div class="progress-bar bg-success" id="progressBar" style="width: 0%"></div>
+                </div>
+                
+                <!-- Tarjeta frontal -->
+                <div id="cardFront" class="flashcard-side p-5 text-center" style="min-height: 350px;">
+                    <div class="mb-3">
+                        <span class="badge bg-primary" id="categoryBadge"></span>
+                        <span class="badge bg-secondary" id="difficultyBadge"></span>
+                    </div>
+                    <h5 class="text-muted mb-3"><i class="fas fa-question-circle"></i> FRENTE</h5>
+                    <p class="display-6 mb-4" id="frontText">Cargando tarjeta...</p>
+                    <div class="mt-4" id="tagsContainer"></div>
+                </div>
+                
+                <!-- Tarjeta dorsal (oculta inicialmente) -->
+                <div id="cardBack" class="flashcard-side p-5 text-center" style="min-height: 350px; display: none;">
+                    <div class="mb-3">
+                        <span class="badge bg-success" id="backCategoryBadge"></span>
+                    </div>
+                    <h5 class="text-muted mb-3"><i class="fas fa-check-circle"></i> DORSO</h5>
+                    <p class="display-6 mb-4" id="backText"></p>
+                    
+                    <!-- Ejemplo (si existe) -->
+                    <div id="exampleSection" class="alert alert-info mt-3" style="display: none;">
+                        <i class="fas fa-quote-left"></i>
+                        <span id="exampleText"></span>
+                        <i class="fas fa-quote-right"></i>
+                    </div>
+                    
+                    <!-- Notas (si existen) -->
+                    <div id="notesSection" class="alert alert-warning mt-2" style="display: none;">
+                        <i class="fas fa-sticky-note"></i>
+                        <span id="notesText"></span>
+                    </div>
+                    
+                    <!-- Estadísticas de la tarjeta -->
+                    <div class="row mt-3 small text-muted">
+                        <div class="col-4">
+                            <i class="fas fa-redo-alt"></i> <span id="reviewCount">0</span>
+                        </div>
+                        <div class="col-4">
+                            <i class="fas fa-check-circle"></i> <span id="correctCount">0</span>
+                        </div>
+                        <div class="col-4">
+                            <i class="fas fa-chart-line"></i> <span id="successRateCard">0%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card-footer bg-white border-0 p-4">
+                <!-- Botones principales (solo 3) -->
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <button class="btn btn-outline-primary w-100 py-3" id="flipBtn" onclick="flipCard()">
+                            <i class="fas fa-sync-alt"></i> Voltear
+                        </button>
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-outline-success w-100 py-3" id="correctBtn" disabled onclick="rateCard(true)">
+                            <i class="fas fa-check"></i> Correcta
+                        </button>
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-outline-danger w-100 py-3" id="incorrectBtn" disabled onclick="rateCard(false)">
+                            <i class="fas fa-times"></i> Incorrecta
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Botones secundarios -->
+                <div class="d-flex justify-content-between">
+                    <button class="btn btn-outline-secondary" onclick="previousCard()" id="prevBtn">
+                        <i class="fas fa-chevron-left"></i> Anterior
+                    </button>
+                    <button class="btn btn-outline-info" onclick="shuffleCards()">
+                        <i class="fas fa-random"></i> Mezclar
+                    </button>
+                    <button class="btn btn-outline-warning" onclick="resetCard()" id="resetBtn">
+                        <i class="fas fa-undo-alt"></i> Reset
+                    </button>
+                    <button class="btn btn-outline-primary" onclick="nextCard()" id="nextBtn">
+                        Siguiente <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Miniaturas de flashcards (carrusel) -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card shadow">
+            <div class="card-header bg-white">
+                <h5 class="mb-0"><i class="fas fa-th"></i> Vista Rápida</h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-2" id="thumbnailsContainer">
+                    <!-- Se llenará con JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de estadísticas detalladas -->
+<div class="modal fade" id="statsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fas fa-chart-pie"></i> Estadísticas de Flashcards</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                    <div class="col-md-6">
+                        <canvas id="difficultyChart"></canvas>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <h6>Progreso por Categoría</h6>
+                        <div id="categoryProgress"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #4a6fa5 0%, #6b4e71 100%);
+    }
+    
+    .stat-card {
+        transition: all 0.3s ease;
+        border-left-width: 4px !important;
+    }
+    
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+    
+    #flashcardContainer {
+        perspective: 1000px;
+    }
+    
+    .flashcard-side {
+        transition: all 0.5s ease;
+        background: white;
+        border-radius: 15px;
+    }
+    
+    .flashcard-side:hover {
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    }
+    
+    .thumbnail-card {
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+    }
+    
+    .thumbnail-card:hover {
+        transform: scale(1.05);
+        border-color: #4a6fa5;
+        z-index: 10;
+    }
+    
+    .thumbnail-card.active {
+        border-color: #4a6fa5;
+        background: #f0f7ff;
+    }
+    
+    .progress {
+        border-radius: 0;
+    }
+    
+    .badge {
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        font-size: 0.9rem;
+    }
+    
+    .btn {
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .btn::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 5px;
+        height: 5px;
+        background: rgba(255,255,255,0.5);
+        opacity: 0;
+        border-radius: 100%;
+        transform: scale(1, 1) translate(-50%);
+        transform-origin: 50% 50%;
+    }
+    
+    .btn:focus:not(:active)::after {
+        animation: ripple 1s ease-out;
+    }
+    
+    @keyframes ripple {
+        0% {
+            transform: scale(0, 0);
+            opacity: 0.5;
+        }
+        20% {
+            transform: scale(25, 25);
+            opacity: 0.3;
+        }
+        100% {
+            opacity: 0;
+            transform: scale(40, 40);
+        }
+    }
+    
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+    
+    .slide-in {
+        animation: slideIn 0.3s ease;
+    }
+</style>
+
+<script>
+    // Variables globales
+    let flashcards = [];
+    let currentIndex = 0;
+    let showingBack = false;
+    let filteredFlashcards = [];
+    
+    // Cargar flashcards al iniciar
+    document.addEventListener('DOMContentLoaded', function() {
+        loadFlashcards();
+    });
+    
+    function loadFlashcards() {
+        fetch('/api/flashcards/all')
+            .then(response => response.json())
+            .then(data => {
+                flashcards = data;
+                filteredFlashcards = [...flashcards];
+                updateStats();
+                displayCard(0);
+                updateThumbnails();
+                updateProgressBar();
+            })
+            .catch(error => {
+                console.error('Error loading flashcards:', error);
+                document.getElementById('frontText').textContent = 'Error cargando flashcards';
+            });
+    }
+    
+    function displayCard(index) {
+        if (filteredFlashcards.length === 0) {
+            document.getElementById('frontText').textContent = 'No hay flashcards disponibles';
+            return;
+        }
+        
+        currentIndex = (index + filteredFlashcards.length) % filteredFlashcards.length;
+        const card = filteredFlashcards[currentIndex];
+        
+        // Actualizar badges
+        document.getElementById('categoryBadge').textContent = card.category || 'General';
+        document.getElementById('difficultyBadge').textContent = card.difficulty || 'intermediate';
+        document.getElementById('backCategoryBadge').textContent = card.category || 'General';
+        
+        // Actualizar colores según dificultad
+        const difficultyBadge = document.getElementById('difficultyBadge');
+        difficultyBadge.className = 'badge bg-' + 
+            (card.difficulty === 'easy' ? 'success' : 
+             card.difficulty === 'intermediate' ? 'warning' : 'danger');
+        
+        // Actualizar contenido
+        document.getElementById('frontText').textContent = card.front || 'Sin contenido';
+        document.getElementById('backText').textContent = card.back || 'Sin traducción';
+        
+        // Mostrar/ocultar ejemplo
+        if (card.example) {
+            document.getElementById('exampleText').textContent = card.example;
+            document.getElementById('exampleSection').style.display = 'block';
+        } else {
+            document.getElementById('exampleSection').style.display = 'none';
+        }
+        
+        // Mostrar/ocultar notas
+        if (card.notes) {
+            document.getElementById('notesText').textContent = card.notes;
+            document.getElementById('notesSection').style.display = 'block';
+        } else {
+            document.getElementById('notesSection').style.display = 'none';
+        }
+        
+        // Actualizar tags
+        if (card.tags) {
+            const tags = card.tags.split(',');
+            document.getElementById('tagsContainer').innerHTML = tags.map(tag => 
+                `<span class="badge bg-secondary me-1">#${tag.trim()}</span>`
+            ).join('');
+        } else {
+            document.getElementById('tagsContainer').innerHTML = '';
+        }
+        
+        // Actualizar estadísticas de la tarjeta
+        document.getElementById('reviewCount').textContent = card.times_reviewed || 0;
+        document.getElementById('correctCount').textContent = card.times_correct || 0;
+        document.getElementById('successRateCard').textContent = (card.success_rate || 0) + '%';
+        
+        // Resetear vista
+        showingBack = false;
+        document.getElementById('cardFront').style.display = 'block';
+        document.getElementById('cardBack').style.display = 'none';
+        document.getElementById('correctBtn').disabled = true;
+        document.getElementById('incorrectBtn').disabled = true;
+        
+        // Actualizar thumbnails
+        updateActiveThumbnail();
+        updateProgressBar();
+    }
+    
+    function flipCard() {
+        showingBack = !showingBack;
+        if (showingBack) {
+            document.getElementById('cardFront').style.display = 'none';
+            document.getElementById('cardBack').style.display = 'block';
+            document.getElementById('correctBtn').disabled = false;
+            document.getElementById('incorrectBtn').disabled = false;
+            
+            // Registrar vista
+            trackView(currentIndex);
+        } else {
+            document.getElementById('cardFront').style.display = 'block';
+            document.getElementById('cardBack').style.display = 'none';
+            document.getElementById('correctBtn').disabled = true;
+            document.getElementById('incorrectBtn').disabled = true;
+        }
+    }
+    
+    function rateCard(isCorrect) {
+        const card = filteredFlashcards[currentIndex];
+        
+        fetch('/api/flashcards/rate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                card_id: card.id,
+                is_correct: isCorrect
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Actualizar estadísticas locales
+            card.times_reviewed = (card.times_reviewed || 0) + 1;
+            if (isCorrect) {
+                card.times_correct = (card.times_correct || 0) + 1;
+            }
+            
+            // Mostrar feedback
+            showFeedback(isCorrect);
+            
+            // Auto-avanzar después de un momento
+            setTimeout(() => {
+                nextCard();
+            }, 1000);
+        })
+        .catch(error => {
+            console.error('Error rating card:', error);
+        });
+    }
+    
+    function showFeedback(isCorrect) {
+        const flashcard = document.getElementById('flashcardContainer');
+        const originalColor = flashcard.style.backgroundColor;
+        
+        flashcard.style.backgroundColor = isCorrect ? '#d4edda' : '#f8d7da';
+        flashcard.style.transition = 'background-color 0.3s ease';
+        
+        setTimeout(() => {
+            flashcard.style.backgroundColor = originalColor;
+        }, 500);
+    }
+    
+    function nextCard() {
+        currentIndex = (currentIndex + 1) % filteredFlashcards.length;
+        displayCard(currentIndex);
+    }
+    
+    function previousCard() {
+        currentIndex = (currentIndex - 1 + filteredFlashcards.length) % filteredFlashcards.length;
+        displayCard(currentIndex);
+    }
+    
+    function shuffleCards() {
+        filteredFlashcards = shuffleArray([...filteredFlashcards]);
+        displayCard(0);
+    }
+    
+    function resetCard() {
+        displayCard(currentIndex);
+    }
+    
+    function applyFilters() {
+        const category = document.getElementById('categoryFilter').value;
+        const difficulty = document.getElementById('difficultyFilter').value;
+        const mode = document.getElementById('studyMode').value;
+        
+        filteredFlashcards = [...flashcards];
+        
+        // Aplicar filtros
+        if (category !== 'all') {
+            filteredFlashcards = filteredFlashcards.filter(c => c.category === category);
+        }
+        if (difficulty !== 'all') {
+            filteredFlashcards = filteredFlashcards.filter(c => c.difficulty === difficulty);
+        }
+        
+        // Aplicar modo
+        switch(mode) {
+            case 'due':
+                filteredFlashcards = filteredFlashcards.filter(c => 
+                    c.next_review && new Date(c.next_review) <= new Date()
+                );
+                break;
+            case 'weak':
+                filteredFlashcards.sort((a, b) => (a.success_rate || 0) - (b.success_rate || 0));
+                break;
+            case 'new':
+                filteredFlashcards = filteredFlashcards.filter(c => (c.times_reviewed || 0) === 0);
+                break;
+            case 'mastered':
+                filteredFlashcards = filteredFlashcards.filter(c => (c.success_rate || 0) >= 80);
+                break;
+        }
+        
+        displayCard(0);
+        updateThumbnails();
+    }
+    
+    function updateThumbnails() {
+        const container = document.getElementById('thumbnailsContainer');
+        container.innerHTML = '';
+        
+        filteredFlashcards.slice(0, 12).forEach((card, idx) => {
+            const thumbnail = document.createElement('div');
+            thumbnail.className = 'col-md-3 col-6';
+            thumbnail.innerHTML = `
+                <div class="card thumbnail-card ${idx === currentIndex ? 'active' : ''}" 
+                     onclick="displayCard(${idx})">
+                    <div class="card-body p-2 text-center">
+                        <span class="badge bg-${card.difficulty === 'easy' ? 'success' : 
+                                              card.difficulty === 'intermediate' ? 'warning' : 'danger'} 
+                               mb-1">${card.difficulty || 'int'}</span>
+                        <p class="small mb-0 text-truncate">${card.front || ''}</p>
+                    </div>
+                </div>
+            `;
+            container.appendChild(thumbnail);
+        });
+    }
+    
+    function updateActiveThumbnail() {
+        const thumbnails = document.querySelectorAll('.thumbnail-card');
+        thumbnails.forEach((thumb, idx) => {
+            if (idx === currentIndex) {
+                thumb.classList.add('active');
+            } else {
+                thumb.classList.remove('active');
+            }
+        });
+    }
+    
+    function updateProgressBar() {
+        const progress = ((currentIndex + 1) / filteredFlashcards.length) * 100;
+        document.getElementById('progressBar').style.width = progress + '%';
+    }
+    
+    function trackView(index) {
+        // Aquí se podría implementar analytics
+        console.log('Viewed card:', index);
+    }
+    
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+    
+    function updateStats() {
+        const studied = flashcards.filter(c => c.times_reviewed > 0).length;
+        const correct = flashcards.reduce((acc, c) => acc + (c.times_correct || 0), 0);
+        const total = flashcards.reduce((acc, c) => acc + (c.times_reviewed || 0), 0);
+        
+        document.getElementById('filtered_count')?.setAttribute('data-count', filteredFlashcards.length);
+    }
+</script>
+{% endblock %}
